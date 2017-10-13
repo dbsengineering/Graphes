@@ -11,13 +11,13 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -95,8 +95,6 @@ public class GraphVue extends View {
             }
             eCy += sizeH/3;
         }
-
-
     }
 
     //Declare this flag globally
@@ -104,7 +102,7 @@ public class GraphVue extends View {
     //Put this into the class
     final Handler handler = new Handler();
 
-    Runnable mLongPressed = new Runnable() {
+    /*Runnable mLongPressed = new Runnable() {
         public void run() {
             goneFlag = true;
 
@@ -145,7 +143,7 @@ public class GraphVue extends View {
 
             Log.w("Noeud : ", String.valueOf("long click"));
         }
-    };
+    };*/
 
 
     /**
@@ -189,8 +187,8 @@ public class GraphVue extends View {
     }
 
     /**
-     * Procédure qui dessine sur le canvas
-     * @param canvas
+     * Procédure qui dessine les arcs et les noeuds sur le canvas
+     * @param canvas : type Canvas
      */
     @Override
     protected void onDraw(Canvas canvas){
@@ -198,7 +196,6 @@ public class GraphVue extends View {
         if(startX != 0 && startY != 0) {
             canvas.drawLine(startX, startY, endX, endY, pPaint);
         }
-
 
         // Si la liste d'arc est égale à 0 alors on affiche pas les arcs
         //Sinon on affiche les arcs
@@ -214,7 +211,6 @@ public class GraphVue extends View {
                 itN.next().getNoeud(canvas);
             }
         }
-
     }
 
     /**
@@ -249,8 +245,6 @@ public class GraphVue extends View {
         this.nodeEnd = nodeEnd;
         //Demander le nom de l'arc
         setTextArc(startX, startY, pointF.x, pointF.y, this.nodeStart, this.nodeEnd);
-        //Arc arc = new Arc(this.startX, this.startY, this.endX, this.endY, "Arc");
-        //lstArc.add(arc);
         startX = 0;
         startY = 0;
     }
@@ -285,11 +279,9 @@ public class GraphVue extends View {
                                         public void run() {
                                             blocked = false;
                                             setNode();
-
                                         }
                                     }, 1000);
                                     //handler.postDelayed(mLongPressed, 3000);
-
                                 }
                             }
                         }else{
@@ -311,7 +303,7 @@ public class GraphVue extends View {
                     invalidate();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    handler.removeCallbacks(mLongPressed);
+                    //handler.removeCallbacks(mLongPressed);
                     moveTouch(x, y);
                     invalidate();
                     break;
@@ -322,7 +314,7 @@ public class GraphVue extends View {
 
                             upTouch(n.getPMilieu(), n);
                         } else {
-                            handler.removeCallbacks(mLongPressed);
+                            //handler.removeCallbacks(mLongPressed);
                         }
                     }
                     invalidate();
