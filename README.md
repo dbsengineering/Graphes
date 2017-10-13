@@ -2,6 +2,8 @@
 
 Istic School Master in Computer Science - Android Project
 
+(exemple of readMe : no finish)
+
 ## Getting Started
 
 ![alt text](https://user-images.githubusercontent.com/8668325/31552578-2b318d08-b038-11e7-88a0-88f43f1b921d.jpg)
@@ -72,7 +74,8 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Jérémy Cavron** - *Initial work* - [PurpleBooth](https://github.com/dbsengineering)
+* **Nada Ezziraiy** - *Initial work* - [PurpleBooth]()
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
