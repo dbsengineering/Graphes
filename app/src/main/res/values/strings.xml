@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Graphes</string>
+    <string name="clearC">Effacer arcs</string>
+    <string name="clearN">Effacer noeuds</string>
+    <string name="titleMsgBA">Nom de l\'arc</string>
+</resources>
