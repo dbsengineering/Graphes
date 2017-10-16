@@ -1,3 +1,16 @@
+/********************************************************************
+ * 						Classe Node     							*
+ * 			      Objet physique et graphique	    		        *
+ * 					       d'un noeud   							*
+ *																	*
+ *		School : .......... Istic									*
+ *		Formation : ....... Master 1 MIAGE							*
+ *		Lecture : ......... MOBILE									*
+ *		Group : ........... 1a										*
+ *		Authors : ......... Cavron Jérémy, Ezziraiy Nada			*
+ *		DateStart : ....... 19/09/2017								*
+ *		DateModify : ...... 16/10/2017								*
+ *******************************************************************/
 package fr.istic.graphes.component;
 
 import android.content.Context;
@@ -9,14 +22,13 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
-
 import fr.istic.graphes.R;
 
 /**
  * Created by cavronjeremy on 04/10/2017.
  */
 
-public class Node  {
+public class Node {
 
     //--- Déclaration des propriétées ---
     private int coulIntern, coulCont; //Couleur interne et contour du noeud
@@ -24,11 +36,12 @@ public class Node  {
     private Paint pCont, pInt; //Peinture interne et contour du noeud
     private TextPaint txtPaint;
     private Context context;
-    private String numNoeud;
-    private String nameNoeud;
+    private String nameNoeud;// Nom du noeud
     private float cordX;
     private float cordY;
     private PointF pMilieu;
+    private static final int SIZE_MIN_NODE = 4; // Taille minimum d'un noeud
+    private static final int POLICE_CHAR = 10; // Police de caractère.
 
 
     /**
@@ -42,26 +55,25 @@ public class Node  {
      * Constructeur de la classe Noeud
      * @param context
      */
-    public Node(Context context, float x, float y, String numNoeud){
-        //super(context);
+    public Node(Context context, float x, float y, String nameNoeud){
         this.context = context;
-        this.numNoeud = numNoeud;
-        this.nameNoeud = String.valueOf(numNoeud);
+        this.nameNoeud = String.valueOf(nameNoeud);
         this.cordX = x;
-        this.cordY = y+7;
+        this.cordY = y + POLICE_CHAR;
         coulIntern = ContextCompat.getColor(context, R.color.colorBlueNoeud); //Couleur bleue interne du noeud
         coulCont = ContextCompat.getColor(context, R.color.colorGreyBord); //Couleur grise externe du noeud
 
         pMilieu = new PointF();
 
-        if(this.nameNoeud.length() <= 4) {
+        //Si le nombre de caractères dans le texte est plus petit ou égal à 4, alors on applique
+        //une taille standard, sinon on applique la taille des caractères + un décalement sur l'abscisse.
+        if(this.nameNoeud.length() <= SIZE_MIN_NODE) {
             rectFInt = new RectF(x - 40, y - 40, x + 40, y + 40);
             rectFExt = new RectF(x - 40, y - 40, x + 40, y + 40);
 
             pMilieu.x = (x-40) +(((x+40)-(x-40))/2);
             pMilieu.y = (y-40) +(((y+40)-(y-40))/2);
         }else{
-            System.out.println("plus grand");
             rectFInt = new RectF(x - (20*this.nameNoeud.length()) / 2,
                     y - 40,
                     x + (20*this.nameNoeud.length()) / 2,
@@ -73,7 +85,7 @@ public class Node  {
 
             pMilieu.x = (x-(20*this.nameNoeud.length()))
                     +(((x+(20*this.nameNoeud.length())/2)
-                    -(x-(20*this.nameNoeud.length())))/2);
+                    -(x-(20*this.nameNoeud.length())))/2) + (4*this.nameNoeud.length());
             pMilieu.y = (y-40) +(((y+40)-(y-40))/2);
         }
 
@@ -101,7 +113,6 @@ public class Node  {
         txtPaint.setColor(Color.WHITE);
         txtPaint.setTypeface(Typeface.create("Arial", Typeface.BOLD));
     }
-
 
     /**
      * Procédure qui permet de modifier la couleur interne d'un noeud.
@@ -147,8 +158,6 @@ public class Node  {
         return this.rectFExt;
     }
 
-
-
     /**
      * Fonction qui retourne l'intérieur du noeud (Graphique).
      * @return intern : de type Path
@@ -174,11 +183,11 @@ public class Node  {
     }
 
     /**
-     * Fonction qui retourne le numéro du noeud.
-     * @return numNoeud : de type entier.
+     * Fonction qui retourne le nom du noeud.
+     * @return nameNoeud : de typechaîne de caractères.
      */
-    public String getNumNoeud(){
-        return this.numNoeud;
+    public String getNameNoeud(){
+        return this.nameNoeud;
     }
 
     /**
@@ -198,7 +207,6 @@ public class Node  {
     }
 
 
-
     /**
      *
      * @return
@@ -206,15 +214,6 @@ public class Node  {
     public PointF getPMilieu(){
         return this.pMilieu;
     }
-
-    /**@Override
-    protected void onDraw(Canvas canvas){
-        super.onDraw(canvas);
-        //canvas.drawOval(this.circleExt, pCont);
-        //canvas.drawOval(this.circleInt, pInt);
-        canvas.drawPath(contour,pCont);
-        canvas.drawPath(intern,pInt);
-    }*/
 
     /**
      * Fonction qui retourne le noeud complet pour un Canva (Graphique).
@@ -227,6 +226,8 @@ public class Node  {
         canvas.drawText(this.nameNoeud,this.cordX,this.cordY, this.txtPaint);
     }
 
+
+
     @Override
     public String toString() {
         return "Node{" +
@@ -238,7 +239,6 @@ public class Node  {
                 ", pInt=" + pInt +
                 ", txtPaint=" + txtPaint +
                 ", context=" + context +
-                ", numNoeud='" + numNoeud + '\'' +
                 ", nameNoeud='" + nameNoeud + '\'' +
                 ", cordX=" + cordX +
                 ", cordY=" + cordY +

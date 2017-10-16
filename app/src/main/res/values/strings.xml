@@ -3,4 +3,5 @@
     <string name="clearC">Effacer arcs</string>
     <string name="clearN">Effacer noeuds</string>
     <string name="titleMsgBA">Nom de l\'arc</string>
+    <string name="titleMsgNode">Nom du noeud</string>
 </resources>

@@ -1,3 +1,16 @@
+/********************************************************************
+ * 						Classe Arc      							*
+ * 			     Objet physique et graphique					    *
+ * 					       d'un arc		        					*
+ *																	*
+ *		School : .......... Istic									*
+ *		Formation : ....... Master 1 MIAGE							*
+ *		Lecture : ......... MOBILE									*
+ *		Group : ........... 1a										*
+ *		Authors : ......... Cavron Jérémy, Ezziraiy Nada			*
+ *		DateStart : ....... 19/09/2017								*
+ *		DateModify : ...... 16/10/2017								*
+ *******************************************************************/
 package fr.istic.graphes.component;
 
 import android.graphics.Canvas;
