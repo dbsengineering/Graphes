@@ -275,23 +275,21 @@ public class GraphVue extends View  {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-            float x = event.getX();
-            float y = event.getY();
+        float x = event.getX();
+        float y = event.getY();
 
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (!blocked){
-                        blocked = true;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
 
-                        //Si la liste des noeuds n'est pas vide, on vérifie qu'on touche un noeud
-                        //pour soit , le déplacer, soit ajouter un arc
-                        //Sinon on crée un noeud
-                        if(lstNode.size() != 0) {
-                            Node n = new Node();
-                            n = touchNode(x,y);
-                            if (n != null){
+                //Si la liste des noeuds n'est pas vide, on vérifie qu'on touche un noeud
+                //pour soit , le déplacer, soit ajouter un arc
+                //Sinon on crée un noeud
+                if (lstNode.size() != 0) {
+                    Node n = new Node();
+                    n = touchNode(x, y);
+                    if (n != null) {
 
-                                startTouch(n.getPMilieu(), n);
+                        startTouch(n.getPMilieu(), n);
                             /*for (Node n : lstNode) {
 
                                 if (n.getExtRectF().contains(x, y) && x != 0 && y != 0) {
@@ -313,59 +311,56 @@ public class GraphVue extends View  {
                                     }, 1000);
                                     //handler.postDelayed(mLongPressed, 3000);
                                 }*/
-                            }else {
+                    } else {
 
-                                nX = x;
-                                nY = y;
-                                handlerNode.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        blocked = false;
-                                        addNode();
-                                    }
-                                }, 2000);
-                                //handler.postDelayed(mLongPressed, 3000);
+                        nX = x;
+                        nY = y;
+                        handlerNode.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //blocked = false;
+                                addNode();
                             }
-                        }else{
-                            nX = x;
-                            nY = y;
-                            handlerNode.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    blocked = false;
-                                    addNode();
+                        }, 2000);
+                        //handler.postDelayed(mLongPressed, 3000);
+                    }
+                } else {
+                    nX = x;
+                    nY = y;
+                    handlerNode.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            blocked = false;
+                            addNode();
 
-                                }
-                            }, 1000);
                         }
-                    }else{
-                        //return false;
-                    }
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    //handler.removeCallbacks(mLongPressed);
+                    }, 1000);
+                }
+                invalidate();
+                break;
 
-                    moveTouch(x, y);
+            case MotionEvent.ACTION_MOVE:
+                //handler.removeCallbacks(mLongPressed);
 
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    blocked = true;
-                    Node n = new Node();
-                    n = touchNode(x,y);
-                    if(n != null){
-                        upTouch(n.getPMilieu(), n);
-                    }else{
-                        startX = 0;
-                        startY = 0;
-                        endX = 0;
-                        endY = 0;
-                    }
-                    blocked = false;
-                    invalidate();
-                    break;
-            }
+                moveTouch(x, y);
+
+                invalidate();
+                break;
+
+            case MotionEvent.ACTION_UP:
+                Node n = new Node();
+                n = touchNode(x, y);
+                if (n != null) {
+                    upTouch(n.getPMilieu(), n);
+                } else {
+                    startX = 0;
+                    startY = 0;
+                    endX = 0;
+                    endY = 0;
+                }
+                invalidate();
+                break;
+        }
         return true;
     }
 

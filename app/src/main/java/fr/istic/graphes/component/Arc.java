@@ -147,18 +147,50 @@ public class Arc {
      * @param canvas
      */
     public void getArc(Canvas canvas){
+
+        // --- Création de la flêche
+        float deltaX =   pEnd.x-pStart.x;
+        float deltaY =   pEnd.y-pStart.y;
+        float frac = (float) 0.1;
+
+        float point_x_1 = pStart.x + (float) ((1 - frac) * deltaX + frac * deltaY);
+        float point_y_1 = pStart.y + (float) ((1 - frac) * deltaY - frac * deltaX);
+
+
+
+        float point_x_3 = pStart.x + (float) ((1 - frac) * deltaX - frac * deltaY);
+        float point_y_3 = pStart.y + (float) ((1 - frac) * deltaY + frac * deltaX);
+
+        float point_x_2 = pEnd.x;
+        float point_y_2 = pEnd.y;
+
+
         float x, y;//Coordonnées milieu arc
         //Test si xDépart < xFin et yDépart < yFin et inversement
         if(this.pStart.x <= this.pEnd.x) {
             x = this.pStart.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
+
+            //point_x_2 = this.nodeEnd.getIntRectF().left+15;
         }else{
             x = this.pEnd.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
+            //point_x_2 = this.nodeEnd.getExtRectF().right-15;// Pointe de la flêche
         }
         if(this.pStart.y <= this.pEnd.y){
             y = this.pStart.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
+
+            //point_y_2 = this.nodeEnd.getExtRectF().top+15;// Pointe de la flêche
         }else{
             y = this.pEnd.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
+            //point_y_2 = this.nodeEnd.getExtRectF().bottom-15;// Pointe de la flêche
         }
+
+
+
+        this.arc.moveTo(point_x_1, point_y_1);
+        this.arc.lineTo(point_x_2, point_y_2);
+        this.arc.lineTo(point_x_3, point_y_3);
+        //this.arc.lineTo(point_x_1, point_y_1);
+        //this.arc.lineTo(point_x_1, point_y_1);
 
 
         //tracer arc
