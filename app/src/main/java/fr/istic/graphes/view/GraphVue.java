@@ -9,11 +9,12 @@
  *		Group : ........... 1a										*
  *		Authors : ......... Cavron Jérémy, Ezziraiy Nada			*
  *		DateStart : ....... 19/09/2017								*
- *		DateModify : ...... 16/10/2017								*
+ *		DateModify : ...... 24/10/2017								*
  *******************************************************************/
 package fr.istic.graphes.view;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,11 +32,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import fr.istic.graphes.R;
 import fr.istic.graphes.component.Arc;
+import fr.istic.graphes.component.MenuNode;
 import fr.istic.graphes.component.Node;
 
 /**
@@ -59,8 +64,15 @@ public class GraphVue extends View  {
     private Path path;
     private Paint pPaint;
     private static final float TOUCH_TOLERANCE = 4;
-    public boolean single, blocked;
+    public boolean single, blocked, blockedArc,btnClick;
     public String m_Text;
+    private float initialTouchX, initialTouchY;
+    private int numNoeud;
+
+    private  Dialog dlMenuNode;
+    private  Dialog dlCoul;
+    private MenuNode mNode;
+
 
 
     /**
@@ -91,6 +103,8 @@ public class GraphVue extends View  {
         path = new Path();
         single = true;
         blocked = false;
+        blockedArc = false;
+        btnClick = false;
 
 
         //Récupération de la taille de l'écran
@@ -100,15 +114,15 @@ public class GraphVue extends View  {
         //Insertion des noeuds
         int eCx;
         int eCy = (sizeH/3)/2;
-        int numNoeud = 1;
+        numNoeud = 1;
         for (int i = 0; i < 3; i++) {
             eCx = (sizeW/3)/2;
             for (int j = 0; j < 3; j++){
-                lstNode.add(new Node(this.context, eCx, eCy, String.valueOf(numNoeud)));
+                lstNode.add(new Node(this.context, eCx, eCy, String.valueOf(numNoeud), numNoeud));
                 eCx += sizeW/3;
                 numNoeud++;
             }
-            eCy += sizeH/3;
+            eCy += sizeH/4;
         }
     }
 
@@ -117,57 +131,29 @@ public class GraphVue extends View  {
     //Put this into the class
     final Handler handlerArc = new Handler();
     final Handler handlerNode = new Handler();
+    final Handler handlerNColor = new Handler();
 
-    /*Runnable mLongPressed = new Runnable() {
+    Runnable mLongPressed = new Runnable() {
         public void run() {
             goneFlag = true;
-
-            if(single) {
-                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
-                View mView = layoutInflaterAndroid.inflate(R.layout.messageboxnode, null);
-                AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
-                alertDialogBuilderUserInput.setView(mView);
-
-                final EditText txtName = (EditText) mView.findViewById(R.id.editTxtNode);
-                alertDialogBuilderUserInput
-                        .setCancelable(false)
-                        .setPositiveButton("Créer Noeud", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                lstNode.add(new Node(context, nX, nY, txtName.getText().toString()));
-                                single = true;
-                            }
-                        })
-
-                        .setNegativeButton("Annuler",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialogBox, int id) {
-                                        dialogBox.cancel();
-                                        single = true;
-                                    }
-                                });
-
-                // Assigner le builderBox au dialogBox.
-                final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
-
-                // Afficher directement le clavier
-                alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-                // Montrer le dialogBox
-                alertDialog.show();
-            }
-            single = false;
-
-            Log.w("Noeud : ", String.valueOf("long click"));
+            addNode();
         }
-    };*/
+    };
+
+    Runnable mLongPressMenuNode = new Runnable(){
+        public void run(){
+            goneFlag = true;
+            afficheMenuNode();
+        }
+    };
 
 
     /**
      * Procédure qui permet de changer la taille de l'image dans le canvas.
-     * @param w
-     * @param h
-     * @param oldw
-     * @param oldh
+     * @param w : longueur du canvas
+     * @param h : hauteur du canvas
+     * @param oldw : ancienne longueur
+     * @param oldh : ancienne hauteur
      */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh){
@@ -210,8 +196,10 @@ public class GraphVue extends View  {
     protected void onDraw(Canvas canvas){
 
         //On dessine le trait courant
-        if(startX != 0 && startY != 0) {
-            canvas.drawLine(startX, startY, endX, endY, pPaint);
+        if(!blockedArc) {
+            if (startX != 0 && startY != 0) {
+                canvas.drawLine(startX, startY, endX, endY, pPaint);
+            }
         }
 
         // Si la liste d'arc est égale à 0 alors on affiche pas les arcs
@@ -233,25 +221,37 @@ public class GraphVue extends View  {
     }
 
     /**
-     *
+     * Procédure qui commence à dessiner un arc
      * @param pointF
      */
-    private void startTouch(PointF pointF, Node nodeStart){
+    private void startTouchDrawArc(PointF pointF, Node nodeStart){
         this.startX = pointF.x;
         this.startY = pointF.y;
         this.nodeStart = nodeStart;
     }
+
+    private void startTouchModifyArc(PointF pointF, Arc arc){
+        this.startX = pointF.x;
+        this.startY = pointF.y;
+        this.arc = arc;
+    }
+
 
     /**
      *
      * @param x
      * @param y
      */
-    private void moveTouch(float x, float y) {
+    private void moveTouchArc(float x, float y) {
         if(x != startX && y != startY) {
             endX = x;
             endY = y;
         }
+    }
+
+    private void moveModTouchArc(float x , float y){
+        endX = x;
+        endY = y;
     }
 
     /**
@@ -275,91 +275,86 @@ public class GraphVue extends View  {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+        /**
+         * click -> options noeud
+         * 1 move direct -> creation arc
+         * 2 secondes d'attente -> active move noeud
+         */
+        if(!btnClick) {
+            float x = event.getX();
+            float y = event.getY();
 
-                //Si la liste des noeuds n'est pas vide, on vérifie qu'on touche un noeud
-                //pour soit , le déplacer, soit ajouter un arc
-                //Sinon on crée un noeud
-                if (lstNode.size() != 0) {
-                    Node n = new Node();
-                    n = touchNode(x, y);
-                    if (n != null) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
 
-                        startTouch(n.getPMilieu(), n);
-                            /*for (Node n : lstNode) {
+                    //Si la liste des noeuds n'est pas vide, on vérifie qu'on touche un noeud
+                    //pour soit , le déplacer, soit ajouter un arc
+                    //Sinon on crée un noeud
+                    if (lstNode.size() != 0) {
+                       // Node n = new Node();
+                        Node n = touchNode(x, y);
+                        if (n != null) {
+                            handlerNColor.postDelayed(mLongPressMenuNode, 2000);//delais de pour appeler mLongPressed
+                            startTouchDrawArc(n.getPMilieu(), n);
+                            if ((Math.abs(x - event.getRawX()) < 5) && (Math.abs(y - event.getRawY()) < 5)) {
 
-                                if (n.getExtRectF().contains(x, y) && x != 0 && y != 0) {
+                            } else {
 
-                                    startTouch(n.getPMilieu(), n);
-                                    System.out.println("dedans");
-                                    //return false;
-
-                                }*/ /*else {
-
-                                    nX = x;
-                                    nY = y;
-                                    handlerNode.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            blocked = false;
-                                            //setNode();
-                                        }
-                                    }, 1000);
-                                    //handler.postDelayed(mLongPressed, 3000);
-                                }*/
+                            }
+                        } else {
+                            nX = x;
+                            nY = y;
+                            handlerNode.postDelayed(mLongPressed, 2000);//delaisde pour appeler mLongPressed
+                        }
+                        Arc a = new Arc();
+                        a = touchArc(x, y);
+                        if (a != null) {
+                            this.blockedArc = true;
+                            startTouchModifyArc(a.getpMilieu(), a);
+                        }
                     } else {
-
                         nX = x;
                         nY = y;
-                        handlerNode.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                //blocked = false;
-                                addNode();
-                            }
-                        }, 2000);
-                        //handler.postDelayed(mLongPressed, 3000);
+                        handlerNode.postDelayed(mLongPressed, 2000);//delais de pression
                     }
-                } else {
-                    nX = x;
-                    nY = y;
-                    handlerNode.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            blocked = false;
-                            addNode();
+                    invalidate();
+                    break;
 
+                case MotionEvent.ACTION_MOVE:
+                    //Tolérance si mover
+                    if (Math.pow(x - (int) event.getRawX(), 2) > Math.pow(5, 2) || Math.pow(y - (int) event.getRawY(), 2) > Math.pow(5, 2)) {
+                        //handlerNColor.removeCallbacks(mLongPressNColor);
+                    }
+                    //handlerNColor.removeCallbacks(mLongPressNColor);
+
+                    moveTouchArc(x, y);
+
+                    invalidate();
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    handlerNode.removeCallbacks(mLongPressed);
+                    handlerNColor.removeCallbacks(mLongPressMenuNode);
+                    if (!this.blockedArc) {
+                        Node n = touchNode(x, y);
+                        if (n != null) {
+                            upTouch(n.getPMilieu(), n);
+                        } else {
+                            startX = 0;
+                            startY = 0;
+                            endX = 0;
+                            endY = 0;
                         }
-                    }, 1000);
-                }
-                invalidate();
-                break;
+                    } else {
+                        PointF point = new PointF(endX, endY);
 
-            case MotionEvent.ACTION_MOVE:
-                //handler.removeCallbacks(mLongPressed);
-
-                moveTouch(x, y);
-
-                invalidate();
-                break;
-
-            case MotionEvent.ACTION_UP:
-                Node n = new Node();
-                n = touchNode(x, y);
-                if (n != null) {
-                    upTouch(n.getPMilieu(), n);
-                } else {
-                    startX = 0;
-                    startY = 0;
-                    endX = 0;
-                    endY = 0;
-                }
-                invalidate();
-                break;
+                        this.arc.setpMilieu(point);
+                        this.blockedArc = false;
+                    }
+                    invalidate();
+                    break;
+            }
         }
         return true;
     }
@@ -381,6 +376,22 @@ public class GraphVue extends View  {
     }
 
     /**
+     * Fonction qui permet de savoir si on touche l'étiquette
+     * d'un arc. Retourne l'arc touché sinon null.
+     * @param x
+     * @param y
+     * @return Arc
+     */
+    private Arc touchArc(float x , float y){
+        for(Arc a : lstArc){
+            if(a.getRectangle().contains(x, y) && x != 0 && y != 0){
+                return a;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Procédure qui demande le nom d'un arc à insérer
      */
     private void setTextArc(final float debX, final float debY, final float finX, final float finY,
@@ -391,8 +402,8 @@ public class GraphVue extends View  {
             AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
 
             alertDialogBuilderUserInput.setView(mView);
-            //EditText
-            final EditText txtName = (EditText) mView.findViewById(R.id.editTxtArc);
+
+            final EditText txtName = (EditText) mView.findViewById(R.id.editTxtArc); // EditText
 
             alertDialogBuilderUserInput
                     .setCancelable(false)
@@ -400,15 +411,14 @@ public class GraphVue extends View  {
                         public void onClick(DialogInterface dialogBox, int id) {
                             single = true;
                             if (!txtName.getText().toString().isEmpty()) {
-                                lstArc.add(new Arc(debX, debY, finX, finY,
-                                        nodeStart, nodeEnd, txtName.getText().toString()));
+                                    lstArc.add(new Arc(debX, debY, finX, finY,
+                                            nodeStart, nodeEnd, txtName.getText().toString()));
                             } else {
                                 Toast.makeText(context, String.valueOf("Vous avez oublié de nommer l'arc"),
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
-
                     .setNegativeButton("Annuler",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialogBox, int id) {
@@ -417,7 +427,6 @@ public class GraphVue extends View  {
 
                                 }
                             });
-
             // Assigner le builderBox au dialogBox.
             final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
 
@@ -441,7 +450,14 @@ public class GraphVue extends View  {
                     .setCancelable(false)
                     .setPositiveButton("Créer Noeud", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogBox, int id) {
-                            lstNode.add(new Node(context, nX, nY, txtName.getText().toString()));
+                            if(numNoeud != 0 ) {
+                                numNoeud ++;
+                                lstNode.add(new Node(context, nX, nY, txtName.getText().toString(), numNoeud));
+
+                            }else{
+                                lstNode.add(new Node(context, nX, nY, txtName.getText().toString(), numNoeud=1));
+                            }
+                            invalidate();
                             single = true;
                         }
                     })
@@ -458,14 +474,136 @@ public class GraphVue extends View  {
             // Afficher directement le clavier
             alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
+            alertDialog.setTitle("Créer un noeud");
+
             // Montrer le dialogBox
             alertDialog.show();
         }
         single = false;
     }
 
+    public void onBackPress(){
+        btnClick = false;
+        single = false;
+    }
+
+
+    /**
+     * Procédure qui demande le nom d'un arc à insérer
+     */
+    private void afficheMenuNode(){
+
+        btnClick = true;
+        mNode = new MenuNode();
+        btnClick = mNode.showDialMenu(context);
+    }
+
     public void setNbNode(int nbNode){
         this.nbNode = nbNode;
+    }
+
+
+    public void clicMenuCoul(){
+        dlCoul = new Dialog(context);
+        dlCoul.setTitle("Couleur");
+        dlCoul.setContentView(R.layout.changecoul);
+        dlCoul.show();
+        mNode.stopDialMenu();
+    }
+
+    /**
+     * Procédure de suppression d'un noeud
+     */
+    public void clicNodeSupp(){
+        mNode.stopDialMenu();
+        //dlMenuNode.dismiss();
+        Iterator itArc = lstArc.iterator();
+        while(itArc.hasNext()){
+            Arc arc = (Arc) itArc.next();
+            if(arc.getNodeStart() == nodeStart || arc.getNodeEnd() == nodeStart){
+                itArc.remove();
+            }
+        }
+        lstNode.remove(nodeStart);
+        invalidate();
+        btnClick = false;
+    }
+
+    public void clicFont(){
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
+        View mView = layoutInflaterAndroid.inflate(R.layout.messageboxnode, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText txtName = (EditText) mView.findViewById(R.id.editTxtNode);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Modifier Texte Noeud", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        nodeStart.setNameNoeud(txtName.getText().toString());
+                        invalidate();
+                        btnClick = false;
+                    }
+                })
+                .setNegativeButton("Annuler",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                                btnClick = false;
+                            }
+                        });
+        // Assigner le builderBox au dialogBox.
+        final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
+
+        // Afficher directement le clavier
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        alertDialog.setTitle("Modifier un noeud");
+
+        // Montrer le dialogBox
+        alertDialog.show();
+        mNode.stopDialMenu();
+
+    }
+
+    /**
+     *
+     * @param couleur
+     */
+    public void clicCoul(String couleur){
+        switch (couleur){
+            case "rouge":
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorRedNoeud));
+                break;
+            case "vert":
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorGreenNoeud));
+                break;
+            case "jaune":
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorYellowNoeud));
+                nodeStart.setCoulFont(ContextCompat.getColor(context, R.color.colorBlack));
+                break;
+            case "orange":
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorOrangeNoeud));
+                break;
+            case "rose":
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorRoseNoeud));
+                nodeStart.setCoulFont(ContextCompat.getColor(context, R.color.colorBlack));
+                break;
+            case "cyan":
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.cyan));
+                nodeStart.setCoulFont(ContextCompat.getColor(context, R.color.colorBlack));
+                break;
+            case "noir":
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorBlack));
+                break;
+            default:
+                nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorBlueNoeud));
+
+        }
+        invalidate();// Application des changement sur la vue
+        btnClick = false;
+        dlCoul.dismiss();
+
     }
 
 

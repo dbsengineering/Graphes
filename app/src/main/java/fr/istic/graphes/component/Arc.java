@@ -17,6 +17,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -29,12 +30,16 @@ public class Arc {
 
     //--- Déclaration des propriétées ---
     private PointF pStart, pEnd;
-    private Paint lignePaint, rectPaint, txtPaint;
-    private Path arc;
+    private Paint lignePaint, rectPaint, txtPaint, arrowPaint;
+    private Path arc, arrow;
     private RectF rectangle;
     private static final float TOUCH_TOLERANCE = 4;
     private String txtArc;
     private Node nodeStart, nodeEnd;
+    private PointF pMilieu;
+    private float x,y;
+
+    public Arc(){}
 
 
     /**
@@ -62,6 +67,11 @@ public class Arc {
         this.lignePaint.setStyle(Paint.Style.STROKE);
         this.lignePaint.setStrokeWidth(5f);
 
+        this.arrowPaint = new Paint();
+        this.arrowPaint.setColor(Color.RED);
+        this.arrowPaint.setAntiAlias(true);
+        this.arrowPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
         this.rectPaint = new Paint();
         this.rectPaint.setColor(Color.WHITE);
         this.rectPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -76,6 +86,25 @@ public class Arc {
 
 
         this.arc = new Path();
+        this.arrow = new Path();
+
+        //Test si xDépart < xFin et yDépart < yFin et inversement
+        if(this.pStart.x <= this.pEnd.x ) {
+            x = this.pStart.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
+        }else{
+            x = this.pEnd.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
+
+        }
+        if(this.pStart.y <= this.pEnd.y){
+            y = this.pStart.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
+
+
+        }else{
+            y = this.pEnd.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
+
+        }
+
+        this.pMilieu = new PointF(0,0);
     }
 
     /**
@@ -107,11 +136,40 @@ public class Arc {
 
 
     /**
+     * Fonction qui retourne le rectangle de l'étiquette
+     * de l'arc
+     * @return
+     */
+    public RectF getRectangle(){
+        return this.rectangle;
+    }
+
+    /**
+     * Fonction qui retourne le milieu de l'arc
+     * @return
+     */
+    public PointF getpMilieu(){
+        return this.pMilieu;
+    }
+
+    public void setpMilieu(PointF point){
+        this.pMilieu = point;
+    }
+
+    /**
      * Fonction qui retourne le nom de l'arc.
      * @return txtArc. De type String.
      */
     public String getTxtArc(){
         return this.txtArc;
+    }
+
+    public Node getNodeStart(){
+        return this.nodeStart;
+    }
+
+    public Node getNodeEnd(){
+        return this.nodeEnd;
     }
 
     //--- Setters ---
@@ -151,12 +209,13 @@ public class Arc {
         // --- Création de la flêche
         float deltaX =   pEnd.x-pStart.x;
         float deltaY =   pEnd.y-pStart.y;
-        float frac = (float) 0.1;
+        //float frac = (float) 0.1;
+        int ARROWHEAD = 50;
+        float sideZ = (float) Math.sqrt(deltaX*deltaX+deltaY*deltaY);
+        float frac = ARROWHEAD < sideZ ? ARROWHEAD / sideZ: 1.0f;
 
         float point_x_1 = pStart.x + (float) ((1 - frac) * deltaX + frac * deltaY);
         float point_y_1 = pStart.y + (float) ((1 - frac) * deltaY - frac * deltaX);
-
-
 
         float point_x_3 = pStart.x + (float) ((1 - frac) * deltaX - frac * deltaY);
         float point_y_3 = pStart.y + (float) ((1 - frac) * deltaY + frac * deltaX);
@@ -164,48 +223,48 @@ public class Arc {
         float point_x_2 = pEnd.x;
         float point_y_2 = pEnd.y;
 
-
-        float x, y;//Coordonnées milieu arc
-        //Test si xDépart < xFin et yDépart < yFin et inversement
-        if(this.pStart.x <= this.pEnd.x) {
-            x = this.pStart.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
-
-            //point_x_2 = this.nodeEnd.getIntRectF().left+15;
-        }else{
-            x = this.pEnd.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
-            //point_x_2 = this.nodeEnd.getExtRectF().right-15;// Pointe de la flêche
-        }
-        if(this.pStart.y <= this.pEnd.y){
-            y = this.pStart.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
-
-            //point_y_2 = this.nodeEnd.getExtRectF().top+15;// Pointe de la flêche
-        }else{
-            y = this.pEnd.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
-            //point_y_2 = this.nodeEnd.getExtRectF().bottom-15;// Pointe de la flêche
-        }
+        //float point_x_4 = pStart.x + (float) ((1 - frac) * deltaX + frac * deltaY);
+        //float point_y_4 = pStart.y + (float) ((1 - frac) * deltaY - frac * deltaX);
 
 
+       //pMilieu = new PointF(x,y);
 
-        this.arc.moveTo(point_x_1, point_y_1);
-        this.arc.lineTo(point_x_2, point_y_2);
-        this.arc.lineTo(point_x_3, point_y_3);
-        //this.arc.lineTo(point_x_1, point_y_1);
-        //this.arc.lineTo(point_x_1, point_y_1);
+        this.arrow.moveTo(point_x_1, point_y_1);
+        this.arrow.lineTo(point_x_2, point_y_2);
+        this.arrow.lineTo(point_x_3, point_y_3);
+        this.arrow.lineTo(point_x_1, point_y_1);
+        //this.arrow.lineTo(point_x_1, point_y_1);
+
+        canvas.drawPath(this.arrow, this.arrowPaint);
 
 
         //tracer arc
         this.arc.moveTo(this.pStart.x,this.pStart.y);
-        this.arc.quadTo(x+50, y+50, this.pEnd.x, this.pEnd.y);
+        if(this.pMilieu.x == 0 && this.pMilieu.y == 0){
+            this.arc.quadTo(x+50, y+50, this.pEnd.x, this.pEnd.y);
+        }else{
+            this.arc.quadTo(this.pMilieu.x+50, this.pMilieu.y+50, this.pEnd.x, this.pEnd.y);
+        }
+
+        //Récupération du milieu de l'arc
+        PathMeasure pM = new PathMeasure(this.arc, false);//Donne longueur avec chaque point de l'arc
+        float[] tab  = new float[2];
+        pM.getPosTan(pM.getLength()/2, tab, null);
+        this.pMilieu.x = tab[0];
+        this.pMilieu.y = tab[1];
+
+
         //this.arc.lineTo(this.pEnd.x, this.pEnd.y);
         //this.arc.lineTo(this.pEnd.x-50, this.pEnd.y-50);
         //this.arc.lineTo(this.pEnd.x, this.pEnd.y);
         //this.arc.lineTo(this.pEnd.x+50, this.pEnd.y-50);
         canvas.drawPath(this.arc, this.lignePaint);
         //tracer cadre du texte
-        this.rectangle = new RectF(x-this.txtArc.length()*20, y - 30, x + this.txtArc.length()*20, y + 10);
+        this.rectangle = new RectF(this.pMilieu.x-this.txtArc.length()*15, this.pMilieu.y - 30,
+                this.pMilieu.x + this.txtArc.length()*15, this.pMilieu.y + 10);
         canvas.drawRoundRect(rectangle,6,6,rectPaint);
         //tracer texte
-        canvas.drawText(this.txtArc, x, y, this.txtPaint);
+        canvas.drawText(this.txtArc, this.pMilieu.x, this.pMilieu.y, this.txtPaint);
     }
 
     /**

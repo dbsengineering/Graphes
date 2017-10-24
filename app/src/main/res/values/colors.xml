@@ -1,9 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorRedNoeud">#e70729</color>
+    <color name="colorRedNoeudP">#9f0920</color>
+    <color name="colorOrangeNoeudP">#a33f05</color>
+    <color name="colorRoseNoeud">#ff00aa</color>
+    <color name="colorRoseNoeudP">#70034b</color>
+    <color name="pink">#EB1460</color>
+    <color name="purple">#9C1AB1</color>
+    <color name="deep_purple">#6633B9</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="indigo">#3D4DB7</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorBlueNoeudP">#0c5e99</color>
     <color name="colorBlueNoeud">#199FFF</color>
+    <color name="blue">#1093F5</color>
+    <color name="light_blue">#00A6F6</color>
+    <color name="cyan">#00BBD5</color>
+    <color name="teal">#009687</color>
+    <color name="green">#46AF4A</color>
+    <color name="colorYellowNoeudP">#778008</color>
+    <color name="colorGreenNoeudP">#205b05</color>
+    <color name="colorGreenNoeud">#369908</color>
+    <color name="light_green">#88C440</color>
+    <color name="lime">#CCDD1E</color>
+    <color name="colorYellowNoeud">#c9d708</color>
+    <color name="yellow">#FFEC16</color>
+    <color name="amber">#FFC100</color>
+    <color name="orange">#FF9800</color>
+    <color name="colorOrangeNoeud">#ff5e00</color>
+    <color name="brown">#7A5547</color>
+    <color name="grey">#9D9D9D</color>
+    <color name="blue_grey">#5E7C8B</color>
     <color name="colorGreyBord">#444444</color>
+    <color name="colorBackG">#99444444</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+
 </resources>

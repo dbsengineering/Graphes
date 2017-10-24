@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:padding="5dip">
+
+    <!--  ListRow Left sied Thumbnail image -->
+    <LinearLayout android:id="@+id/lSup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/image_bg"
+        android:layout_marginRight="5dip">
+
+        <ImageView
+            android:id="@+id/sup"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/garbage"
+            android:onClick="clicSupp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/Tsup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/lSup"
+        android:layout_toRightOf="@+id/lSup"
+        android:text="@string/supprim"
+        android:textColor="@color/colorBackG"
+        android:typeface="sans"
+        android:textSize="42sp"
+        android:textStyle="bold"
+        android:onClick="clicSupp" />
+</RelativeLayout>

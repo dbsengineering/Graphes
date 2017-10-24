@@ -4,4 +4,16 @@
     <string name="clearN">Effacer noeuds</string>
     <string name="titleMsgBA">Nom de l\'arc</string>
     <string name="titleMsgNode">Nom du noeud</string>
+    <string name="titleMsgNodeColor">Couleur du noeud</string>
+    <string name="couleur">Couleur</string>
+    <string name="supprim">Supprimer</string>
+    <string name="nommer">Renommer</string>
+    <string name="changTaille">Changer la taille</string>
+    <string name="optionsnode">Options Noeud</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu">Menu</string>
+    <string name="reinit">Rénitialiser</string>
+    <string name="save">Sauvegarder</string>
+    <string name="open">Ouvrir un graphe</string>
+    <string name="send">Envoyer mail</string>
 </resources>

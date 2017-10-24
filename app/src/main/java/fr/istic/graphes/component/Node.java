@@ -9,61 +9,69 @@
  *		Group : ........... 1a										*
  *		Authors : ......... Cavron Jérémy, Ezziraiy Nada			*
  *		DateStart : ....... 19/09/2017								*
- *		DateModify : ...... 16/10/2017								*
+ *		DateModify : ...... 24/10/2017								*
  *******************************************************************/
 package fr.istic.graphes.component;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
+import android.view.View;
+import android.view.View.OnClickListener;
+
 import fr.istic.graphes.R;
 
 /**
  * Created by cavronjeremy on 04/10/2017.
  */
 
-public class Node {
+public class Node implements OnClickListener {
 
     //--- Déclaration des propriétées ---
-    private int coulIntern, coulCont; //Couleur interne et contour du noeud
+    private int coulIntern, coulCont, coulFont; //Couleur interne et contour du noeud
     private RectF rectFInt, rectFExt;
     private Paint pCont, pInt; //Peinture interne et contour du noeud
     private TextPaint txtPaint;
     private Context context;
     private String nameNoeud;// Nom du noeud
-    private float cordX;
-    private float cordY;
+    private float cordX; //coordonnées x
+    private float cordY; // Coordonnées y
     private PointF pMilieu;
+    private int id;//Identifiant du noeud
     private static final int SIZE_MIN_NODE = 4; // Taille minimum d'un noeud
     private static final int POLICE_CHAR = 10; // Police de caractère.
+   // private Map<Integer,Node> mapNeightNode;//Liste des noeuds voisins
 
 
     /**
      *
      */
-    public Node(){
+    public Node(){}
 
-    }
 
     /**
      * Constructeur de la classe Noeud
      * @param context
      */
-    public Node(Context context, float x, float y, String nameNoeud){
+    public Node(Context context, float x, float y, String nameNoeud, int id){
         this.context = context;
         this.nameNoeud = String.valueOf(nameNoeud);
         this.cordX = x;
         this.cordY = y + POLICE_CHAR;
+        this.id = id;//Initialise l'identifiant
         coulIntern = ContextCompat.getColor(context, R.color.colorBlueNoeud); //Couleur bleue interne du noeud
         coulCont = ContextCompat.getColor(context, R.color.colorGreyBord); //Couleur grise externe du noeud
+        coulFont = ContextCompat.getColor(context, R.color.colorWhite); //Couleur blanche du texte
 
         pMilieu = new PointF();
+
+
+        //mapNeightNode = new HashMap<Integer,Node>();//Initialisation de la map des voisins
 
         //Si le nombre de caractères dans le texte est plus petit ou égal à 4, alors on applique
         //une taille standard, sinon on applique la taille des caractères + un décalement sur l'abscisse.
@@ -90,7 +98,6 @@ public class Node {
         }
 
 
-
         //Initialisation des Paint (peinture)
         //Intérieur
         pInt = new Paint();
@@ -110,8 +117,17 @@ public class Node {
         txtPaint = new TextPaint();
         txtPaint.setTextSize(30);
         txtPaint.setTextAlign(Paint.Align.CENTER);
-        txtPaint.setColor(Color.WHITE);
+        txtPaint.setColor(coulFont);
         txtPaint.setTypeface(Typeface.create("Arial", Typeface.BOLD));
+    }
+
+    /**
+    * Procédure qui permet d'afficher le menu d'options sur le noeud.
+    */
+    @Override
+    public void onClick(View v){
+        System.out.println("coucou");
+
     }
 
     /**
@@ -120,35 +136,50 @@ public class Node {
      */
     public void setCoulIntern(int couleur){
         this.coulIntern = couleur;
+        this.pInt.setColor(couleur);
     }
 
     /**
-     *  Procédure qui permet de modifier la couleur du contour d'un noeud.
+     * Procédure qui permet de changer la couleur du texte d'un noeud.
      * @param couleur : nouvelle couleur. De type entier.
      */
-    public void setCoulContour(int couleur){
-        this.coulCont = couleur;
+    public void setCoulFont(int couleur){
+        this.coulFont = couleur;
+        this.txtPaint.setColor(couleur);
     }
+
+    public void setNameNoeud(String nameNoeud){
+        this.nameNoeud = String.valueOf(nameNoeud);
+        this.setSize(nameNoeud.length());
+    }
+
+    /**
+     * Procédure qui change la taille du noeud
+     * @param taille
+     */
+    public void setSize(int taille){
+        float y = this.cordY - POLICE_CHAR;
+        pMilieu = new PointF();
+        rectFInt = new RectF(this.cordX - (20*taille) / 2,
+                y - 40,
+                this.cordX + (20*taille) / 2,
+                y + 40);
+        rectFExt = new RectF(this.cordX - (20*taille) / 2,
+                y - 40,
+                this.cordX + (20*taille) / 2,
+                y + 40);
+
+        pMilieu.x = (this.cordX-(20*taille))
+                +(((this.cordX+(20*taille)/2)
+                -(this.cordX-(20*taille)))/2) + (4*taille);
+        pMilieu.y = (y-40) +(((y+40)-(y-40))/2);
+    }
+
 
     public void setPMilieu(PointF pMilieu){
         this.pMilieu = pMilieu;
     }
 
-    /**
-     * Fonction qui retourne le couleur interne du noeud.
-     * @return coulIntern : de type entier.
-     */
-    public int getCoulIntern(){
-        return this.coulIntern;
-    }
-
-    /**
-     * Fonction qui retourne la couleur du contour du noeud.
-     * @return coulCont : de type entier.
-     */
-    public int getCoulCont(){
-        return this.coulCont;
-    }
 
     /**
      * Fonction qui retourne le contour du noeuds (Graphique).
@@ -162,9 +193,9 @@ public class Node {
      * Fonction qui retourne l'intérieur du noeud (Graphique).
      * @return intern : de type Path
      */
-    public RectF getIntRectF(){
+    /*public RectF getIntRectF(){
         return this.rectFInt;
-    }
+    }*/
 
     /**
      * Fonction qui retourne la peinture du contour du noeud (Graphique).
@@ -204,6 +235,14 @@ public class Node {
      */
     public float getCordY(){
         return this.cordY;
+    }
+
+    /**
+     * Fonction qui retourne l'id du noeud
+     * @return
+     */
+    public int getId(){
+        return this.id;
     }
 
 
