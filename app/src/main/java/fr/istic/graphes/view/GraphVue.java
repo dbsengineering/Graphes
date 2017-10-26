@@ -26,11 +26,13 @@ import android.graphics.PointF;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -39,7 +41,6 @@ import java.util.List;
 
 import fr.istic.graphes.R;
 import fr.istic.graphes.component.Arc;
-import fr.istic.graphes.component.MenuNode;
 import fr.istic.graphes.component.Node;
 
 /**
@@ -69,9 +70,9 @@ public class GraphVue extends View  {
     private float initialTouchX, initialTouchY;
     private int numNoeud;
 
-    private  Dialog dlMenuNode;
+    private AlertDialog dlMenuNode;
+    private AlertDialog dlSizeNode;
     private  Dialog dlCoul;
-    private MenuNode mNode;
 
 
 
@@ -133,7 +134,7 @@ public class GraphVue extends View  {
     final Handler handlerNode = new Handler();
     final Handler handlerNColor = new Handler();
 
-    Runnable mLongPressed = new Runnable() {
+    Runnable mLongPressedAddNode = new Runnable() {
         public void run() {
             goneFlag = true;
             addNode();
@@ -295,7 +296,8 @@ public class GraphVue extends View  {
                        // Node n = new Node();
                         Node n = touchNode(x, y);
                         if (n != null) {
-                            handlerNColor.postDelayed(mLongPressMenuNode, 2000);//delais de pour appeler mLongPressed
+                            handlerNColor.postDelayed(mLongPressMenuNode, 2000);//delais pour afficher le menu du noeud
+
                             startTouchDrawArc(n.getPMilieu(), n);
                             if ((Math.abs(x - event.getRawX()) < 5) && (Math.abs(y - event.getRawY()) < 5)) {
 
@@ -305,7 +307,7 @@ public class GraphVue extends View  {
                         } else {
                             nX = x;
                             nY = y;
-                            handlerNode.postDelayed(mLongPressed, 2000);//delaisde pour appeler mLongPressed
+                            handlerNode.postDelayed(mLongPressedAddNode, 2000);//delais pour ajouter un noeud
                         }
                         Arc a = new Arc();
                         a = touchArc(x, y);
@@ -316,7 +318,7 @@ public class GraphVue extends View  {
                     } else {
                         nX = x;
                         nY = y;
-                        handlerNode.postDelayed(mLongPressed, 2000);//delais de pression
+                        handlerNode.postDelayed(mLongPressedAddNode, 2000);//delais pour ajouter un noeud
                     }
                     invalidate();
                     break;
@@ -334,8 +336,8 @@ public class GraphVue extends View  {
                     break;
 
                 case MotionEvent.ACTION_UP:
-                    handlerNode.removeCallbacks(mLongPressed);
-                    handlerNColor.removeCallbacks(mLongPressMenuNode);
+                    handlerNode.removeCallbacks(mLongPressedAddNode);//détruire le handler d'ajout de noeud
+                    handlerNColor.removeCallbacks(mLongPressMenuNode);// Détruire le handler du menu noeud
                     if (!this.blockedArc) {
                         Node n = touchNode(x, y);
                         if (n != null) {
@@ -489,34 +491,41 @@ public class GraphVue extends View  {
 
 
     /**
-     * Procédure qui demande le nom d'un arc à insérer
+     * Procédure qui permet d'afficher le menu du noeuds touché.
      */
     private void afficheMenuNode(){
 
         btnClick = true;
-        mNode = new MenuNode();
-        btnClick = mNode.showDialMenu(context);
+        //mNode = new MenuNode();
+        //btnClick = mNode.showDialMenu(context);
+        showDialMenu(context);
     }
 
+    /**
+     *
+     * @param nbNode
+     */
     public void setNbNode(int nbNode){
         this.nbNode = nbNode;
     }
 
 
+    /**
+     * Procédure qui permet de lancer un AlertDialog pour le changement de couleur d'un noeud.
+     */
     public void clicMenuCoul(){
+        dlMenuNode.dismiss();
         dlCoul = new Dialog(context);
         dlCoul.setTitle("Couleur");
         dlCoul.setContentView(R.layout.changecoul);
         dlCoul.show();
-        mNode.stopDialMenu();
     }
 
     /**
      * Procédure de suppression d'un noeud
      */
     public void clicNodeSupp(){
-        mNode.stopDialMenu();
-        //dlMenuNode.dismiss();
+        dlMenuNode.dismiss();
         Iterator itArc = lstArc.iterator();
         while(itArc.hasNext()){
             Arc arc = (Arc) itArc.next();
@@ -529,7 +538,11 @@ public class GraphVue extends View  {
         btnClick = false;
     }
 
+    /**
+     * Procédure qui permet d'afficher un AlertDialog sur le click du menu Font.
+     */
     public void clicFont(){
+        dlMenuNode.dismiss();
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
         View mView = layoutInflaterAndroid.inflate(R.layout.messageboxnode, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
@@ -548,8 +561,8 @@ public class GraphVue extends View  {
                 .setNegativeButton("Annuler",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
-                                dialogBox.cancel();
                                 btnClick = false;
+                                dialogBox.cancel();
                             }
                         });
         // Assigner le builderBox au dialogBox.
@@ -562,12 +575,53 @@ public class GraphVue extends View  {
 
         // Montrer le dialogBox
         alertDialog.show();
-        mNode.stopDialMenu();
+    }
 
+
+    /**
+     * Procédure qui affiche un AlertDialogue pour modifier la taille du noeud.
+     */
+    public void clicSize(){
+        dlMenuNode.dismiss();
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
+        View mView = layoutInflaterAndroid.inflate(R.layout.sizenode, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final NumberPicker np = (NumberPicker) mView.findViewById(R.id.np);//Récupération du NumberPicker
+        int taille = nodeStart.getSize();
+        np.setMinValue(nodeStart.getSize());
+        np.setMaxValue(200);
+        np.setValue(nodeStart.getSize());
+
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Modifier", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        nodeStart.setSize(np.getValue());
+                        btnClick = false;
+                        invalidate();
+                    }
+                })
+                .setNegativeButton("Annuler",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                btnClick = false;
+                                dialogBox.cancel();
+                            }
+                        });
+        // Assigner le builderBox au dialogBox.
+        final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
+
+        //Titre de l'AlertDialog
+        alertDialog.setTitle("Modifier taille du noeud");
+
+        // Montrer le dialogBox
+        alertDialog.show();
     }
 
     /**
-     *
+     *  Procédure qui permet d'assigner la couleur d'un noeud suivant le choix de couleur
      * @param couleur
      */
     public void clicCoul(String couleur){
@@ -600,10 +654,45 @@ public class GraphVue extends View  {
                 nodeStart.setCoulIntern(ContextCompat.getColor(context, R.color.colorBlueNoeud));
 
         }
+        dlCoul.dismiss();
         invalidate();// Application des changement sur la vue
         btnClick = false;
-        dlCoul.dismiss();
+    }
 
+    /**
+     * Fonction qui affiche le menu d'un noeud.
+     * @param context
+     * @return
+     */
+    public boolean showDialMenu(Context context){
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
+        View mView = layoutInflaterAndroid.inflate(R.layout.optsnode, null);
+        AlertDialog.Builder dlgBuild = new AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey (DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK &&
+                                event.getAction() == KeyEvent.ACTION_UP &&
+                                !event.isCanceled()) {
+                            btnClick = false;
+                            dialog.cancel();
+                        }
+                        return false;
+                    }
+                })
+                .setNegativeButton("Annuler",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                btnClick = false;
+                                dialogBox.cancel();
+                            }
+                        });
+        dlgBuild.setView(mView);
+        dlMenuNode = dlgBuild.create();
+        dlMenuNode.setTitle("Options Noeud");
+        dlMenuNode.show();
+        return false;
     }
 
 

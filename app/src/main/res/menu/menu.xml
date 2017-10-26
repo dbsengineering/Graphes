@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/reinit"
         android:title="@string/reinit" />
+    <item android:id="@+id/supNode"
+        android:title="@string/clearN" />
+    <item android:id="@+id/supArc"
+        android:title="@string/clearC" />
     <item android:id="@+id/save"
         android:title="@string/save" />
     <item android:id="@+id/open"

@@ -71,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.reinit:
                 reinit();
                 return true;
+            case R.id.supNode:
+                clearNodes();
+                Toast.makeText(this, "Noeuds et arcs supprimés", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.supArc:
+                clearArcs();
+                Toast.makeText(this, "Arcs supprimés", Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.save:
                 Toast.makeText(this, "Sauvegarde effectuée", Toast.LENGTH_SHORT).show();
                 return true;
@@ -88,17 +96,15 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      *
-     * @param v
      */
-    public void clearArcs(View v){
+    public void clearArcs(){
         graphVue.clearArcs();
     }
 
     /**
      *
-     * @param v
      */
-    public void clearNodes(View v){
+    public void clearNodes(){
         graphVue.clearNodes();
     }
 
@@ -112,6 +118,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void clicFont(View v){
         graphVue.clicFont();
+    }
+
+    /**
+     * Procédure qui permet d'appeler le menu de changement de taille du noeud.
+     * @param v
+     */
+    public void clicMenuSize(View v){
+        graphVue.clicSize();
     }
 
 
@@ -156,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
             System.exit(0);
         } else {
             doubleBackToExitPressed++;
+            graphVue.onBackPress();
             Toast.makeText(this, "Cliquer 2 fois de suite pour quitter", Toast.LENGTH_SHORT).show();
         }
         new Handler().postDelayed(new Runnable() {

@@ -20,7 +20,7 @@
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:src="@drawable/size"
-            android:onClick="clicMenuCoul"/>
+            android:onClick="clicMenuSize"/>
     </LinearLayout>
 
     <TextView
@@ -34,5 +34,5 @@
         android:typeface="sans"
         android:textSize="42sp"
         android:textStyle="bold"
-        android:onClick="clicMenuCoul" />
+        android:onClick="clicMenuSize" />
 </RelativeLayout>
