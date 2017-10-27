@@ -54,7 +54,32 @@ public class Arc {
      */
     public Arc(float startX, float startY, float endX, float endY,
                Node nodeStart, Node nodeEnd, String txtArc){
+        init(startX, startY, endX, endY, nodeStart, nodeEnd, txtArc);
 
+    }
+
+    /**
+     * Constructeur 2 de la classe Arc.
+     * @param startX
+     * @param startY
+     */
+    public Arc(float startX, float startY){
+
+        this.pStart = new PointF(startX,startY);
+    }
+
+    /**
+     * Procédure d'initialisation de l'arc.
+     * @param startX
+     * @param startY
+     * @param endX
+     * @param endY
+     * @param nodeStart
+     * @param nodeEnd
+     * @param txtArc
+     */
+    private void init(float startX, float startY, float endX, float endY,
+                      Node nodeStart, Node nodeEnd, String txtArc){
         this.pStart = new PointF(startX,startY);
         this.pEnd = new PointF(endX,endY);
         this.txtArc = txtArc;
@@ -77,13 +102,11 @@ public class Arc {
         this.rectPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.rectPaint.setAntiAlias(true);
 
-
         this.txtPaint = new TextPaint();
         this.txtPaint.setTextSize(30);
         this.txtPaint.setTextAlign(Paint.Align.CENTER);
         this.txtPaint.setColor(Color.BLACK);
         this.txtPaint.setTypeface(Typeface.create("Arial", Typeface.BOLD));
-
 
         this.arc = new Path();
         this.arrow = new Path();
@@ -93,27 +116,14 @@ public class Arc {
             x = this.pStart.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
         }else{
             x = this.pEnd.x + (Math.abs(this.pStart.x - this.pEnd.x) / 2);//Centrer x milieu de l'arc
-
         }
         if(this.pStart.y <= this.pEnd.y){
             y = this.pStart.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
-
-
         }else{
             y = this.pEnd.y + (Math.abs(this.pStart.y - this.pEnd.y) / 2);//Centrer y milieu de l'arc
 
         }
-
         this.pMilieu = new PointF(0,0);
-    }
-
-    /**
-     * Constructeur 2 de la classe Arc.
-     * @param startX
-     * @param startY
-     */
-    public Arc(float startX, float startY){
-        this.pStart = new PointF(startX,startY);
     }
 
     //--- Getters ---
@@ -201,10 +211,12 @@ public class Arc {
     }
 
     /**
-     *
+     * Procédure qui dessine l'arc.
      * @param canvas
      */
-    public void getArc(Canvas canvas){
+    public void drawArc(Canvas canvas){
+
+        //System.out.println("bbbb");
 
         // --- Création de la flêche
         float deltaX =   pEnd.x-pStart.x;
@@ -222,9 +234,6 @@ public class Arc {
 
         float point_x_2 = pEnd.x;
         float point_y_2 = pEnd.y;
-
-        //float point_x_4 = pStart.x + (float) ((1 - frac) * deltaX + frac * deltaY);
-        //float point_y_4 = pStart.y + (float) ((1 - frac) * deltaY - frac * deltaX);
 
 
        //pMilieu = new PointF(x,y);
@@ -245,6 +254,7 @@ public class Arc {
         }else{
             this.arc.quadTo(this.pMilieu.x+50, this.pMilieu.y+50, this.pEnd.x, this.pEnd.y);
         }
+        this.arc.quadTo(x+50, y+50, this.pEnd.x, this.pEnd.y);
 
         //Récupération du milieu de l'arc
         PathMeasure pM = new PathMeasure(this.arc, false);//Donne longueur avec chaque point de l'arc
@@ -258,6 +268,7 @@ public class Arc {
         //this.arc.lineTo(this.pEnd.x-50, this.pEnd.y-50);
         //this.arc.lineTo(this.pEnd.x, this.pEnd.y);
         //this.arc.lineTo(this.pEnd.x+50, this.pEnd.y-50);
+
         canvas.drawPath(this.arc, this.lignePaint);
         //tracer cadre du texte
         this.rectangle = new RectF(this.pMilieu.x-this.txtArc.length()*15, this.pMilieu.y - 30,
@@ -266,6 +277,8 @@ public class Arc {
         //tracer texte
         canvas.drawText(this.txtArc, this.pMilieu.x, this.pMilieu.y, this.txtPaint);
     }
+
+
 
     /**
      *

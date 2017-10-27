@@ -21,15 +21,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="76fb65a4b41ea42dab8a1310ed772a2420c96b52">
-        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.0.0_667e95dcce9941f24f2d05b8ac599d122b0d4bfc/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars/libs/internal_impl-25.0.0.jar"
         jumboMode="true"
         optimize="true"
@@ -39,20 +30,11 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="4ccbcda5c72027c7f7c14be9ff8640d9cb0d8da0">
-        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.0.0_f5d393cb279dfc52dfee4611878a24b1dbf9fd4b/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.3"
-        sha1="ca6045dfe632cdc41fb7c276c052613fb2b8f22a">
+        sha1="e47d65c47dc5204bbe8f7ef11d628b2fd9fdbde6">
         <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_a808ce33c827d7b5f49a17bd08158f887372bd7a/classes.dex" />
     </item>
     <item
@@ -66,21 +48,66 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/cavronjeremy/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.0/support-annotations-25.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="a22d2cc94da87b254451fa8ed28afc30b4653773">
-        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.0.0_bc312b1079dab5e6a02499916e0bc51c7d9e6560/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.3"
         sha1="07daa0b6e1d455c82a38422ffe287c18823d339a">
         <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.0.0_8ac0d1c79560ee7d3444b78536cd2f12f1fbb524/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="d29714cc76b38157e3cbd034c66e1ec808eb4c19">
+        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.0.0_fbc49280f587f1b36a103abbcd1ee31d247c184f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.0.0_bfe4cd9ac5cf8dbb80719090d38cfccf76116825/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ed9d7da959f1eb4eb484ff4e44d2e1b15bfa626d">
+        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_1b86d123fe8d076b94640bbd529632b78c220197/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="76fb65a4b41ea42dab8a1310ed772a2420c96b52">
+        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.0.0_667e95dcce9941f24f2d05b8ac599d122b0d4bfc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4ccbcda5c72027c7f7c14be9ff8640d9cb0d8da0">
+        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.0.0_f5d393cb279dfc52dfee4611878a24b1dbf9fd4b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/cavronjeremy/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.0/support-annotations-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="a22d2cc94da87b254451fa8ed28afc30b4653773">
+        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.0.0_bc312b1079dab5e6a02499916e0bc51c7d9e6560/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -111,15 +138,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="d29714cc76b38157e3cbd034c66e1ec808eb4c19">
-        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.0.0_fbc49280f587f1b36a103abbcd1ee31d247c184f/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.0/jars/libs/internal_impl-25.0.0.jar"
         jumboMode="true"
         optimize="true"
@@ -135,24 +153,6 @@
         revision="23.0.3"
         sha1="75b1f366ff0bbc78f8b1f7cf0dc82e7c53afef6a">
         <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.0.0_f2806d12e05c1c911fd8c4afc3b469f8e1edbfba/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.0.0_bfe4cd9ac5cf8dbb80719090d38cfccf76116825/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="5de8a1e7e51100be864d50483eb2551e35cd8b2d">
-        <dex dex="/Users/cavronjeremy/Projets/Android/Graphes/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_1b86d123fe8d076b94640bbd529632b78c220197/classes.dex" />
     </item>
 
 </items>

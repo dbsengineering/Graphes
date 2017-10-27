@@ -120,6 +120,10 @@ public class Node  {
         this.coulFont = couleur;
         this.txtPaint.setColor(couleur);
     }
+    public void setCoord(float x, float y){
+        this.cordX = x;
+        this.cordY = y;
+    }
 
     /**
      * Procédure qui modifie le texte du noeud.
@@ -167,6 +171,12 @@ public class Node  {
                 -(this.cordY-taille))/2);
     }
 
+    public void setMove(float x, float y){
+        this.cordX = x;
+        this.cordY = y;
+        setSize(this.taille);
+    }
+
     /**
      * Fonction qui retourne la taille du noeud.
      * @return
@@ -178,6 +188,13 @@ public class Node  {
         return this.nameNoeud.length()+40;
     }
 
+    /**
+     * Fonction qui retourne la couleur interne du noeud.
+     * @return coulIntern : couleur interne du noeud. De type entier.
+     */
+    public int getCoulIntern(){
+        return this.coulIntern;
+    }
 
     /**
      * Fonction qui retourne le centre de gravité du noeud.
@@ -186,7 +203,6 @@ public class Node  {
     public void setPMilieu(PointF pMilieu){
         this.pMilieu = pMilieu;
     }
-
 
     /**
      * Fonction qui retourne le contour du noeuds (Graphique).
@@ -200,9 +216,9 @@ public class Node  {
      * Fonction qui retourne l'intérieur du noeud (Graphique).
      * @return intern : de type Path
      */
-    /*public RectF getIntRectF(){
+    public RectF getIntRectF(){
         return this.rectFInt;
-    }*/
+    }
 
     /**
      * Fonction qui retourne la peinture du contour du noeud (Graphique).
@@ -228,21 +244,6 @@ public class Node  {
         return this.nameNoeud;
     }
 
-    /**
-     * Fonction qui retourne la coordonnée X du noeud.
-     * @return cordX : de type entier.
-     */
-    public float getCordX(){
-        return this.cordX;
-    }
-
-    /**
-     * Fonction qui retourne la coordonnée Y du noeud.
-     * @return cordY : de type entier.
-     */
-    public float getCordY(){
-        return this.cordY;
-    }
 
     /**
      * Fonction qui retourne l'id du noeud
@@ -251,7 +252,6 @@ public class Node  {
     public int getId(){
         return this.id;
     }
-
 
     /**
      *
@@ -266,13 +266,11 @@ public class Node  {
      * @param canvas : de type Canvas.
      * @return Canvas : Canvas avec ajour du noeud : de type Canvas.
      */
-    public void getNoeud(Canvas canvas){
+    public void drawNoeud(Canvas canvas){
         canvas.drawOval(this.rectFInt, pInt);
         canvas.drawOval(this.rectFExt, pCont);
         canvas.drawText(this.nameNoeud,this.cordX,this.cordY+POLICE_CHAR, this.txtPaint);
     }
-
-
 
     @Override
     public String toString() {
