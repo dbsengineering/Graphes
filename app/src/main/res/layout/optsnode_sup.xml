@@ -6,7 +6,6 @@
     android:orientation="horizontal"
     android:padding="5dip">
 
-    <!--  ListRow Left sied Thumbnail image -->
     <LinearLayout android:id="@+id/lSup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +19,7 @@
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:src="@drawable/garbage"
-            android:onClick="clicSupp"/>
+            android:onClick="clicSuppN"/>
     </LinearLayout>
 
     <TextView
@@ -29,10 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/lSup"
         android:layout_toRightOf="@+id/lSup"
-        android:text="@string/supprim"
+        android:text="@string/deleteN"
         android:textColor="@color/colorBackG"
         android:typeface="sans"
         android:textSize="42sp"
         android:textStyle="bold"
-        android:onClick="clicSupp" />
+        android:onClick="clicSuppN" />
 </RelativeLayout>

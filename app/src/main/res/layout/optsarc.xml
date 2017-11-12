@@ -1,0 +1,16 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/optsarc_color"/>
+        <include layout="@layout/optsarc_size"/>
+        <include layout="@layout/optsarc_sizelabel"/>
+        <include layout="@layout/optsarc_font"/>
+        <include layout="@layout/optsarc_sup"/>
+    </LinearLayout>
+</ScrollView>

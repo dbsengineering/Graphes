@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorBlue">#037bfc</color>
+    <color name="colorDarkGrey">#252525</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorRedNoeud">#e70729</color>
     <color name="colorRedNoeudP">#9f0920</color>
@@ -36,5 +38,4 @@
     <color name="colorBackG">#99444444</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
-
 </resources>

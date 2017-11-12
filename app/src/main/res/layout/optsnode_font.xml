@@ -20,7 +20,7 @@
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:src="@drawable/font"
-            android:onClick="clicFont"/>
+            android:onClick="clicFontN"/>
     </LinearLayout>
 
     <TextView
@@ -29,10 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/lF"
         android:layout_toRightOf="@+id/lF"
-        android:text="@string/nommer"
+        android:text="@string/naming"
         android:textColor="@color/colorBackG"
         android:typeface="sans"
         android:textSize="42sp"
         android:textStyle="bold"
-        android:onClick="clicFont" />
+        android:onClick="clicFontN" />
 </RelativeLayout>

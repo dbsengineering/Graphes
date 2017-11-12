@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("bzh.dbs.graphes", appContext.getPackageName());
+        assertEquals("fr.istic.graphes", appContext.getPackageName());
     }
 }

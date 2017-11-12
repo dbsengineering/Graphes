@@ -5,7 +5,21 @@
     <item android:id="@+id/supNode"
         android:title="@string/clearN" />
     <item android:id="@+id/supArc"
-        android:title="@string/clearC" />
+        android:title="@string/clearA" />
+    <group
+        android:id="@+id/groupModify"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/normalMode"
+            android:checked="true"
+            android:title="@string/normMode" />
+        <item
+            android:id="@+id/addArc"
+            android:title="@string/addArc" />
+        <item
+            android:id="@+id/moveAN"
+            android:title="@string/moveNA" />
+    </group>
     <item android:id="@+id/save"
         android:title="@string/save" />
     <item android:id="@+id/open"
