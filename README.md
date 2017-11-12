@@ -6,7 +6,7 @@ Istic School Master in Computer Science - Android Project
 
 ## Getting Started
 
-![alt text](https://user-images.githubusercontent.com/8668325/32703927-9a2e8dbe-c7fd-11e7-9b2d-06b56f1e1b54.png){:height="50%" width="50%"}
+<img src="https://user-images.githubusercontent.com/8668325/32703927-9a2e8dbe-c7fd-11e7-9b2d-06b56f1e1b54.png" width="400" height="790">
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
