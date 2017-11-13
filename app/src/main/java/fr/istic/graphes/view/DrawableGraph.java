@@ -159,6 +159,7 @@ public class DrawableGraph extends View {
         //Grille de décoration
         GridPaint gP = new GridPaint(this.height, this.width);
         canvas.drawPath(gP.getPath(),gP.getPaint());
+        gP.getTileP(canvas);
 
 
         //--- Dessine le graph ---
