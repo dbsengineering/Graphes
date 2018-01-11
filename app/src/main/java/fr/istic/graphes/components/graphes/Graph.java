@@ -13,11 +13,12 @@
  *		DateStart : ....... 19/09/2017								*
  *		DateModify : ...... 09/11/2017								*
  *******************************************************************/
-package fr.istic.graphes.components.graphes;
+package bzh.dbs.graph.components.graphes;
 
 import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -43,13 +44,6 @@ public class Graph implements Parcelable, Serializable {
 
     }
 
-    /**
-     * Constructeur 1 de la classe.
-     * @param in
-     */
-    public Graph(Parcel in) {
-        mData = in.readInt();
-    }
 
     /**
      * Constructeur 2 de la classe.
@@ -214,21 +208,7 @@ public class Graph implements Parcelable, Serializable {
     //--- Parcelable ---
 
     /**
-     * Procédure de création d'un Parcelable
-     */
-    public static final Parcelable.Creator<Graph> CREATOR
-            = new Parcelable.Creator<Graph>() {
-        public Graph createFromParcel(Parcel in) {
-            return new Graph(in);
-        }
-
-        public Graph[] newArray(int size) {
-            return new Graph[size];
-        }
-    };
-
-    /**
-     * Procédure qui décrit le parcelable
+     * Fonction qui permet d'écrire le contenu du Parcel.
      * @return
      */
     @Override
@@ -237,17 +217,86 @@ public class Graph implements Parcelable, Serializable {
     }
 
     /**
-     * Procédure qui écrit le parcelable
-     * @param out
-     * @param flags
+     * Procédure qui permet de parceler l'objet.
+     * @param dest : La parcelle dans laquelle l'objet doit être écrit. Parcel.
+     * @param flags : Drapeaux supplémentaires sur la façon dont l'objet doit être écrit.
+     *              Peut être 0 ou PARCELABLE_WRITE_RETURN_VALUE.
      */
     @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(this.mData);
+        dest.writeInt(this.numNode);
+        dest.writeInt(this. numArc);
+        dest.writeFloat(this.divScreenW);
+        dest.writeFloat(this.divScreenH);
+
+        int i = 0;
+        for(Node node : this.lstNodes){
+            dest.writeParcelable(node,i);
+            i++;
+        }
+        i = 0;
+        for(Arc arc : this.lstArcs){
+            dest.writeParcelable(arc,i);
+            i++;
+        }
     }
 
 
+    /**
+     * Création d’un objet CREATOR de la classe Parcelable
+     */
+    public static final Parcelable.Creator<Graph> CREATOR = new Parcelable.Creator<Graph>() {
+        /**
+         *
+         * @param in
+         * @return
+         */
+        public Graph createFromParcel(Parcel in) {
+            return new Graph(in);
+        }
+
+        /**
+         *
+         * @param size
+         * @return
+         */
+        public Graph[] newArray(int size) {
+            return new Graph[size];
+        }
+    };
+
+    /**
+     * Constructeur pour le parcel. Propriétées dans l'ordre d'écriture.
+     * @param in Parcel
+     */
+    public Graph(Parcel in){
+        try {
+            this.lstNodes.clear();
+            this.lstArcs.clear();
+        }catch(Exception e){
+            Log.v("Graph_Graph", "problème Parcel : "+e.toString());
+        }
+            this.mData = in.readInt();
+            this.numNode = in.readInt();
+            this.numArc = in.readInt();
+            this.divScreenW = in.readFloat();
+            this.divScreenH = in.readFloat();
 
 
+            int k = 0;
+            for (int i = 0; i < (in.dataSize() - 5); i++) {
+                Node node  = (Node) in.readParcelable(Node.class.getClassLoader());
+                node.reinit();
+                this.lstNodes.add(node);
+                k++;
+            }
 
+
+            for (int i = 0; i < ((in.dataSize() - 5) - k); i++) {
+                this.lstArcs.add((Arc) in.readParcelable(Arc.class.getClassLoader()));
+            }
+
+    }
 }
