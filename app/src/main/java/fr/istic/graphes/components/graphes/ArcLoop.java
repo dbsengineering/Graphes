@@ -12,16 +12,18 @@
  *		DateStart : ....... 09/09/2017								*
  *		DateModify : ...... 12/11/2017								*
  *******************************************************************/
-package fr.istic.graphes.components.graphes;
+package bzh.dbs.graph.components.graphes;
 
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import java.io.Serializable;
+
 /**
  *
  */
-public class ArcLoop extends Arc {
+public class ArcLoop extends Arc implements Serializable {
 
     //--- Déclaration des propriétées ---
     private float x;
