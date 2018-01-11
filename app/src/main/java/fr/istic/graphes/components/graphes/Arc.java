@@ -11,50 +11,49 @@
  *		DateStart : ....... 19/09/2017								*
  *		DateModify : ...... 12/11/2017								*
  *******************************************************************/
-package fr.istic.graphes.components.graphes;
+package bzh.dbs.graph.components.graphes;
 
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
 /**
  *
  */
-public class Arc implements Serializable {
+public class Arc  implements Parcelable, Serializable {
 
     //--- Déclaration des propriétées ---
     private static final long serialVersionUID = -29238982928392L;
     protected String nameArc;
-    protected RectF rectTxt; // RectF pour l'étiquette de l'arc
     protected String color, colorTxt; // Couleur de l'arc
-    protected int id, tailleEti; // id de l'arc, taille etiquette
-    protected PathMeasure pM; //Mesure la longueur de l'arc
-    protected PointF pMiddle;
-    protected Path pthArc, pthArrow; //Path Arc, arrow
-    protected Node nodeStart, nodeEnd; //Noeuds de départ et d'arrivé
-    protected float[] tab; //Récupération milieu de l'arc
-    protected Region region; //Région
-    protected float posX, posY;
     protected int thickness; // Epaisseur du trait
     protected int sizeL; // taille étiquette
-
+    protected int id, tailleEti; // id de l'arc, taille etiquette
+    protected float posX, posY;
+    protected float[] tab; //Récupération milieu de l'arc
+    transient protected PointF pMiddle;
+    transient protected RectF rectTxt; // RectF pour l'étiquette de l'arc
+    transient protected Path pthArc, pthArrow; //Path Arc, arrow
+    transient protected PathMeasure pM; //Mesure la longueur de l'arc
+    transient protected Region region; //Région
+    protected Node nodeStart, nodeEnd; //Noeuds de départ et d'arrivé
 
     /**
      * Constructeur 1 de l'arc.
      */
-    public Arc() {
-
-    }
+    public Arc() {}
 
     /**
      * Constructeur 2 de la classe.
      *
-     * @param nodeStart
-     * @param nodeEnd
+     * @param nodeStart : noeud de départ. Node.
+     * @param nodeEnd : noeud d'arrivé. Node.
      */
     public Arc(Node nodeStart, Node nodeEnd, String nameArc, int id) {
         //Initialisation
@@ -67,14 +66,16 @@ public class Arc implements Serializable {
         this.colorTxt = "blanc";
         this.thickness = 8;
         this.sizeL = 10;
-
-        posX = 0;
-        posY = 0;
+        this.posX = 0;
+        this.posY = 0;
 
         //Initialisation du path arc
         initPath();
     }
 
+    /**
+     * Procédure d'initialisation du Path
+     */
     private void initPath() {
         this.pthArc = new Path();
         this.pthArrow = new Path();
@@ -94,8 +95,6 @@ public class Arc implements Serializable {
         this.pM = new PathMeasure(this.pthArc, false);//Donne longueur avec chaque point de l'arc
         this.tab = new float[2];
         this.pM.getPosTan(pM.getLength() / 2, tab, null);
-
-
 
         // --- Création de la flêche
         float deltaX = nodeEnd.getpMiddle().x - nodeStart.getpMiddle().x;
@@ -230,8 +229,8 @@ public class Arc implements Serializable {
     //--- Setter ---
 
     public void setPath(float xStart, float yStart, float xStop, float yStop) {
-        posX = xStop;
-        posY = yStop;
+        this.posX = xStop;
+        this.posY = yStop;
     }
 
     /**
@@ -271,4 +270,111 @@ public class Arc implements Serializable {
         this.sizeL = size;
     }
 
+
+    /**
+     * Fonction qui permet d'écrire le contenu du Parcel.
+     * @return
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Procédure qui permet de parceler l'objet.
+     * @param dest : La parcelle dans laquelle l'objet doit être écrit. Parcel.
+     * @param flags : Drapeaux supplémentaires sur la façon dont l'objet doit être écrit.
+     *              Peut être 0 ou PARCELABLE_WRITE_RETURN_VALUE.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(this.nameArc);
+        dest.writeString(this.color);
+        dest.writeString(this.colorTxt);
+
+        dest.writeInt(this.thickness);
+        dest.writeInt(this.sizeL);
+        dest.writeInt(this.id);
+        dest.writeInt(this.tailleEti);
+
+        dest.writeFloat(this.posX);
+        dest.writeFloat(this.posY);
+        dest.writeFloat(this.tab[0]);
+        dest.writeFloat(this.tab[1]);
+
+        float x = this.pMiddle.x;
+        float y = this.pMiddle.y;
+
+        dest.writeFloat(x);
+        dest.writeFloat(y);
+
+        float recLeft = this.rectTxt.left;
+        float recRight = this.rectTxt.right;
+        float recTop = this.rectTxt.top;
+        float recBottom = this.rectTxt.bottom;
+
+        dest.writeFloat(recLeft);
+        dest.writeFloat(recRight);
+        dest.writeFloat(recTop);
+        dest.writeFloat(recBottom);
+
+        dest.writeParcelable(this.nodeStart,0);
+        dest.writeParcelable(this.nodeEnd,0);
+    }
+
+    /**
+     * Création d’un objet CREATOR de la classe Parcelable
+     */
+    public static final Parcelable.Creator<Arc> CREATOR = new Parcelable.Creator<Arc>() {
+        /**
+         *
+         * @param in
+         * @return
+         */
+        public Arc createFromParcel(Parcel in) {
+            return new Arc(in);
+        }
+
+        /**
+         *
+         * @param size
+         * @return
+         */
+        public Arc[] newArray(int size) {
+            return new Arc[size];
+        }
+    };
+
+    /**
+     * Constructeur pour le parcel. Propriétées dans l'ordre d'écriture.
+     * @param in Parcel
+     */
+    public Arc(Parcel in){
+
+        this.nameArc = in.readString();
+        this.color = in.readString();
+        this.colorTxt = in.readString();
+
+        this.thickness = in.readInt();
+        this.sizeL = in.readInt();
+        this.id = in.readInt();
+        this.tailleEti = in.readInt();
+
+        this.posX = in.readFloat();
+        this.posY = in.readFloat();
+        this.tab[0] = in.readFloat();
+        this.tab[1] = in.readFloat();
+
+        this.pMiddle.x = in.readFloat();
+        this.pMiddle.y = in.readFloat();
+
+        this.rectTxt.left = in.readFloat();
+        this.rectTxt.right = in.readFloat();
+        this.rectTxt.top = in.readFloat();
+        this.rectTxt.bottom = in.readFloat();
+
+        this.nodeStart = in.readParcelable(Node.class.getClassLoader());
+        this.nodeEnd = in.readParcelable(Node.class.getClassLoader());
+    }
 }
