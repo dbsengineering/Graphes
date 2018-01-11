@@ -14,7 +14,7 @@
  *		DateStart : ....... 19/09/2017								*
  *		DateModify : ...... 12/11/2017								*
  *******************************************************************/
-package fr.istic.graphes;
+package bzh.dbs.graph;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -40,6 +40,9 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,13 +52,15 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import fr.istic.graphes.components.graphes.Arc;
-import fr.istic.graphes.components.graphes.Graph;
-import fr.istic.graphes.components.graphes.Node;
-import fr.istic.graphes.utils.FileAdapter;
-import fr.istic.graphes.view.DrawableGraph;
+import bzh.dbs.graph.R;
+import bzh.dbs.graph.components.graphes.Arc;
+import bzh.dbs.graph.components.graphes.Graph;
+import bzh.dbs.graph.components.graphes.Node;
+import bzh.dbs.graph.utils.FileAdapter;
+import bzh.dbs.graph.utils.SerializableManager;
+import bzh.dbs.graph.view.DrawableGraph;
 
-import static fr.istic.graphes.R.id.graphG;
+import static bzh.dbs.graph.R.id.graphG;
 
 /**
  *
@@ -263,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
                             dGraph.draw(pStart = null, pEnd = null);
                             dGraph.invalidate();
                         }
-
                     }
                     break;
             }
@@ -508,7 +512,6 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 node.setSize(np.getValue());
-
                                 dGraph.invalidate();
                             }
                         })
@@ -1084,28 +1087,13 @@ public class MainActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void save(String nameFile) throws IOException {
-        //SerializableManager.saveSerializable(context,graph,nameFile);
-
-        //try {
-        String path = Environment.getExternalStorageDirectory() + File.separator + "/DCIM/Graphs" + File.separator;
-        File dir = new File(path);
-        path += nameFile + ".gra";
-        File data = new File(path);
-        if (!data.createNewFile()) {
-            data.delete();
-            data.createNewFile();
+        try {
+            String path = Environment.getExternalStorageDirectory() + File.separator + "/DCIM/Graphs" + File.separator;
+            path += nameFile + ".gra";
+            SerializableManager.saveFile(graph, path);
+        }catch(Exception e){
+            Log.e("Main_save", "Problème sauvegarde : " + e);
         }
-
-        //JSONObject graphJson = new JSONObject();
-        //graphJson.put("Graph", graph);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(data));
-        objectOutputStream.writeObject(graph);
-        objectOutputStream.flush();
-        objectOutputStream.close();
-
-        /*}catch(JSONException e){
-
-        }*/
     }
 
 
@@ -1122,7 +1110,9 @@ public class MainActivity extends AppCompatActivity {
 
         // lister les fichiers
         for (int i = 0; i < files.length; i++) {
-            lstFile.add(path + File.separator + files[i].getName());
+            if (files[i].isFile() && files[i].getPath().endsWith(".gra")) {
+                lstFile.add(path + File.separator + files[i].getName());
+            }
         }
         adapter = new FileAdapter(context, lstFile);
 
@@ -1161,32 +1151,24 @@ public class MainActivity extends AppCompatActivity {
      * @throws ClassNotFoundException
      */
     private void openFile(String path) throws IOException, ClassNotFoundException {
-        // Graph graph = SerializableManager.readSerializable(context,path);
-        //try {
-        //JSONObject graphJson = new JSONObject();
+        try {
+            Graph object = null;
+            File data = new File(path);
+            if (data.exists()) {
+                graph.clearNodes();
+                graph.clearArcs();
 
-        Graph object = null;
-        File data = new File(path);
-        if (data.exists()) {
+                graph = SerializableManager.openGraph(path);
 
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(data));
-            object = (Graph) ois.readObject();
-            ois.close();
-            graph = object;
-            dGraph.invalidate();
-            //graphJson = (JSONObject) object;
-            //graph = (Graph) graphJson.get("Graph");
-
-            //dGraph.invalidate();
-               /* FileInputStream fis = context.openFileInput(path);
-                ObjectInputStream is = new ObjectInputStream(fis);
-                Graph graph1 = (Graph) is.readObject();
-                is.close();
-                fis.close();*/
+                for(Node node : graph.getLstNodes()){
+                    node.reinit();
+                }
+                dGraph.setGraph(graph);
+                dGraph.invalidate();
+            }
+        } catch (Exception e) {
+            Log.e("Main_open", "Problème ouverture : " + e);
         }
-        /*}catch(JSONException e){
-
-        }*/
     }
 
     /**
@@ -1195,7 +1177,7 @@ public class MainActivity extends AppCompatActivity {
     private void createFolder() {
         final File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Graphs");
         if (!f.exists()) {
-            boolean rv = f.mkdir();
+            f.mkdir();
         }
     }
 
@@ -1282,6 +1264,8 @@ public class MainActivity extends AppCompatActivity {
             sharingIntent.setType("image/png");
             sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
             startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share)));
+
+            file.delete();
 
         } catch (Exception e) {
             e.printStackTrace();
