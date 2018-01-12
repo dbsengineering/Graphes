@@ -9,7 +9,7 @@
  *		Formation : ....... Master 1 MIAGE							*
  *		Lecture : ......... MOBILE									*
  *		Group : ........... 1a										*
- *		Authors : ......... Cavron Jérémy, Ez Ziraiy Nada			*
+ *		Authors : ......... Cavron Jérémy               			*
  *		DateStart : ....... 11/11/2017								*
  *		DateModify : ...... 11/11/2017								*
  *******************************************************************/
@@ -22,9 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
 import fr.istic.graphes.R;
 
 /**
@@ -100,7 +98,6 @@ public class FileAdapter extends BaseAdapter {
             holder.txtFile = (TextView) convertView.findViewById(R.id.txtFile);
 
             convertView.setTag(holder);
-
         }else{
             holder = (ViewHolder)convertView.getTag();
         }
