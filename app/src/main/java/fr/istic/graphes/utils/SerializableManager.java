@@ -1,16 +1,24 @@
-package bzh.dbs.graph.utils;
+/********************************************************************
+ * 						Classe SerializableManager					*
+ * 			            Permet de sérialiser des objects.           *
+ * 					                    							*
+ *																	*
+ *		School : .......... Istic									*
+ *		Formation : ....... Master 1 MIAGE							*
+ *		Lecture : ......... MOBILE									*
+ *		Group : ........... 1a										*
+ *		Authors : ......... Cavron Jérémy               			*
+ *		DateStart : ....... 19/12/2017								*
+ *		DateModify : ...... 12/01/2018								*
+ *******************************************************************/
+package fr.istic.graphes.utils;
 
-import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import bzh.dbs.graph.components.graphes.Graph;
 
 /**
