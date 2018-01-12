@@ -8,11 +8,11 @@
  *		Formation : ....... Master 1 MIAGE							*
  *		Lecture : ......... MOBILE									*
  *		Group : ........... 1a										*
- *		Authors : ......... Cavron Jérémy, Ez Ziraiy Nada			*
+ *		Authors : ......... Cavron Jérémy                   		*
  *		DateStart : ....... 19/09/2017								*
  *		DateModify : ...... 09/11/2017								*
  *******************************************************************/
-package fr.istic.graphes.view;
+package bzh.dbs.graph.view;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,7 +47,6 @@ public class GridPaint  {
         this.width = width;
         this.height = height;
 
-
         this.gridP = new Paint();
         this.gridP.setColor(Color.WHITE);
         this.gridP.setAntiAlias(true);
@@ -74,7 +73,7 @@ public class GridPaint  {
 
         this.path = new Path();//Init Path
         nbTiles = 10;
-        //this.sizeGrid = (Math.min((int)height,(int)width)/nbTiles);//150
+
         this.sizeGrid = (Math.min((int)height,(int)width));//150
         this.sizeGrid = this.sizeGrid/nbTiles;
 
@@ -90,7 +89,6 @@ public class GridPaint  {
 
         debGrid = (this.height/3)/2;
         finGrid = this.debGrid*4+sizeGrid;
-
     }
 
     /**
@@ -112,11 +110,6 @@ public class GridPaint  {
     public void getTileP(Canvas canvas){
         int k = 0;
         for(int i=0; i < this.width; i+=this.sizeGrid) {
-            /*if(k%2 == 0) {
-                canvas.drawRect(i, 0, this.sizeGrid + i, this.sizeGrid, this.tilesP);
-            }else{
-                canvas.drawRect(i, 0, this.sizeGrid + i, this.sizeGrid, this.tilesImp);
-            }*/
             for(int j=(int)this.debGrid; j < this.finGrid; j+=this.sizeGrid) {
                 if(k%2 == 0) {
                     canvas.drawRect(i, j, this.sizeGrid + i, this.sizeGrid+j, this.tilesP);
@@ -127,6 +120,5 @@ public class GridPaint  {
             }
             k++;
         }
-        //k = 0;
     }
 }
