@@ -20,8 +20,8 @@ in menu, you can :
 * Reset graphic interface
 * Erase nodes
 * Erase arcs
-* Add & modify nodes
-* Add & modify arcs
+* Add & edit nodes ( color, size, rename, delete)
+* Add & edit arcs ( color, size, size Text, rename, delete)
 * Move nodes & arcs
 * Save Graph in file (.gra)
 * Open .gra files
