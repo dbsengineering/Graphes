@@ -30,7 +30,6 @@ Deploy on api > 16.
 ## Authors
 
 * **Jérémy Cavron** - *Initial work* - [DBS Engineering Development](https://github.com/dbsengineering)
-* **Nada Ezziraiy** - *Initial work* - []()
 
 ## Acknowledgments
 
