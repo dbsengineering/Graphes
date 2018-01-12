@@ -92,16 +92,25 @@ public class MainActivity extends AppCompatActivity {
         //Affectation des objets à la vue
         dGraph = (DrawableGraph) findViewById(graphG);
 
+        //Si la sérialisation est diférente de nulle, alors on charge la sérialisation
+        //Sinon on démarre une activité basique
         if (savedInstanceState != null) {
 
             this.graph = (Graph) savedInstanceState.getSerializable("Graph");
 
-            for(Node node : graph.getLstNodes()){
-                node.reinit();
+            //Test si le graphe sérialisé est vide
+            if(this.graph.getLstNodes() != null) {
+
+                for (Node node : graph.getLstNodes()) {
+                    node.reinit();
+                }
+                blockToMove = true;
+                blockToArc = false;
+                dGraph.setGraph(graph);
+                if (savedInstanceState.getBoolean("CheckerGame")) {
+                    dGraph.activeCheckerGame();
+                }
             }
-            blockToMove = true;
-            blockToArc = false;
-            dGraph.setGraph(graph);
             dGraph.invalidate();
         }else {
             this.graph = dGraph.getGraph();// Initialisation du graph (non graphique)
@@ -137,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putSerializable("Graph", graph);
+        savedInstanceState.putBoolean("CheckerGame", dGraph.getCheckerGame());
     }
 
     /**
@@ -841,6 +851,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 graph.clearArcs();
+                dGraph.desactiveCheckerGame();
                 dGraph.invalidate();
             }
         });
@@ -916,6 +927,7 @@ public class MainActivity extends AppCompatActivity {
             }
             blockToMove = true;
             blockToArc = false;
+            dGraph.activeCheckerGame();
             dGraph.setGraph(graph);
             dGraph.invalidate();
         } catch (Exception e) {
@@ -1244,6 +1256,7 @@ public class MainActivity extends AppCompatActivity {
                 nodeEnd = null;
                 graph.clearNodes();
                 graph.clearArcs();
+                dGraph.desactiveCheckerGame();
                 dGraph.invalidate();
             }
         });
