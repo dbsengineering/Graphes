@@ -11,7 +11,24 @@ The application allows you to create, save and send graphs.
 
 <img src="https://user-images.githubusercontent.com/8668325/32703984-7ea598d4-c7fe-11e7-826e-26989b3369c0.png" width="400" height="790">
 
-Are you bored?
+## Menu
+
+<img src="https://user-images.githubusercontent.com/8668325/34890399-063f0b38-f7d2-11e7-91b0-638dea9858de.png" width="400" height="790">
+
+in menu, you can : 
+
+* Reset graphic interface
+* Erase nodes
+* Erase arcs
+* Add & modify nodes
+* Add & modify arcs
+* Move nodes & arcs
+* Save Graph in file (.gra)
+* Open .gra files
+* Share graph
+* Play to game :-)
+
+## Are you bored?
 
 So, you can load in special mode, a checkers game.
 
