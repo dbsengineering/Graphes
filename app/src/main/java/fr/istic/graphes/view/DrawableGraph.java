@@ -30,10 +30,10 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import bzh.dbs.graph.R;
-import bzh.dbs.graph.components.graphes.Arc;
-import bzh.dbs.graph.components.graphes.Graph;
-import bzh.dbs.graph.components.graphes.Node;
+import fr.istic.graphes.R;
+import fr.istic.graphes.components.graphes.Arc;
+import fr.istic.graphes.components.graphes.Graph;
+import fr.istic.graphes.components.graphes.Node;
 
 /**
  *
