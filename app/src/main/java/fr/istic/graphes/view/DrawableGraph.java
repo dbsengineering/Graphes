@@ -8,11 +8,11 @@
  *		Formation : ....... Master 1 MIAGE							*
  *		Lecture : ......... MOBILE									*
  *		Group : ........... 1a										*
- *		Authors : ......... Cavron Jérémy, Ez Ziraiy Nada			*
+ *		Authors : ......... Cavron Jérémy               			*
  *		DateStart : ....... 19/09/2017								*
  *		DateModify : ...... 12/11/2017								*
  *******************************************************************/
-package fr.istic.graphes.view;
+package bzh.dbs.graph.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -30,10 +30,10 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import fr.istic.graphes.R;
-import fr.istic.graphes.components.graphes.Arc;
-import fr.istic.graphes.components.graphes.Graph;
-import fr.istic.graphes.components.graphes.Node;
+import bzh.dbs.graph.R;
+import bzh.dbs.graph.components.graphes.Arc;
+import bzh.dbs.graph.components.graphes.Graph;
+import bzh.dbs.graph.components.graphes.Node;
 
 /**
  *
@@ -57,6 +57,7 @@ public class DrawableGraph extends View {
      */
     public DrawableGraph(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setSaveEnabled(false);
         init(context);
     }
 
@@ -160,7 +161,6 @@ public class DrawableGraph extends View {
         GridPaint gP = new GridPaint(this.height, this.width);
         canvas.drawPath(gP.getPath(),gP.getPaint());
         gP.getTileP(canvas);
-
 
         //--- Dessine le graph ---
         //Affiche arc temporaire
