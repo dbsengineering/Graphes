@@ -19,7 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import bzh.dbs.graph.components.graphes.Graph;
+import fr.istic.graphes.components.graphes.Graph;
 
 /**
  * Created by cavronjeremy on 11/11/2017.
