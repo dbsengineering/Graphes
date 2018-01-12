@@ -50,6 +50,7 @@ public class DrawableGraph extends View {
     private Canvas canvas;
     private PointF pStart, pEnd;
     private Path pthArc, pthArrow; // Path de l'arc, Arrow
+    private boolean isGrid;
 
     /**
      * Constructeur de la classe.
@@ -130,6 +131,8 @@ public class DrawableGraph extends View {
         //Initialisation PointF arc
         pStart = new PointF();
         pEnd = new PointF();
+
+        isGrid = false;
     }
 
     /**
@@ -160,7 +163,11 @@ public class DrawableGraph extends View {
         //Grille de décoration
         GridPaint gP = new GridPaint(this.height, this.width);
         canvas.drawPath(gP.getPath(),gP.getPaint());
-        gP.getTileP(canvas);
+
+        //Si on active le jeu de dames, on affiche les tuiles du jeu
+        if (isGrid) {
+            gP.getTileP(canvas);
+        }
 
         //--- Dessine le graph ---
         //Affiche arc temporaire
@@ -221,6 +228,29 @@ public class DrawableGraph extends View {
         this.pStart = pStart;
         this.pEnd = pEnd;
         invalidate();
+    }
+
+    /**
+     * Procédure qui peremt d'activer les tuiles pour le jeu de dames.
+     */
+    public void activeCheckerGame(){
+        this.isGrid = true;
+    }
+
+    /**
+     * Procédure qui permet de désactiver les tuiles pour le jeu de dames.
+     */
+    public void desactiveCheckerGame(){
+        this.isGrid = false;
+    }
+
+    /**
+     * Fonction qui retourne si les tuiles pour le jeu de dames sont actives
+     * ou pas.
+     * @return boolean.
+     */
+    public boolean getCheckerGame(){
+        return this.isGrid;
     }
 
     /**
