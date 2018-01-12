@@ -34,7 +34,7 @@ So, you can load in special mode, a checkers game.
 
 <img src="https://user-images.githubusercontent.com/8668325/34890215-54b263ec-f7d1-11e7-9bbe-e974d2236af5.png" width="400" height="790">
 
-Rulers of checkers game. when you eat token.. put this token over line. When you win, change color to make a super token.
+Rulers of checkers game. when you eat token.. put this token over yellow line. When you win, change color to make a super token.
 
 
 ### Prerequisites
