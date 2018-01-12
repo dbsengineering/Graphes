@@ -10,11 +10,11 @@
  *		Formation : ....... Master 1 MIAGE							*
  *		Lecture : ......... MOBILE									*
  *		Group : ........... 1a										*
- *		Authors : ......... Cavron Jérémy, Ez Ziraiy Nada			*
+ *		Authors : ......... Cavron Jérémy               			*
  *		DateStart : ....... 19/09/2017								*
- *		DateModify : ...... 12/11/2017								*
+ *		DateModify : ...... 01/01/2018								*
  *******************************************************************/
-package bzh.dbs.graph;
+package fr.istic.graphes;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -39,27 +39,19 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import bzh.dbs.graph.R;
 import bzh.dbs.graph.components.graphes.Arc;
 import bzh.dbs.graph.components.graphes.Graph;
 import bzh.dbs.graph.components.graphes.Node;
 import bzh.dbs.graph.utils.FileAdapter;
 import bzh.dbs.graph.utils.SerializableManager;
 import bzh.dbs.graph.view.DrawableGraph;
-
 import static bzh.dbs.graph.R.id.graphG;
 
 /**
@@ -72,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private float[] startXY = new float[2]; // Coordonnées d'un start
     private float[] stopXY = new float[2]; //Coordonnées d'un touch stop
     private boolean blockToArc, blockToMove; //Block les menus pour effectuer des actions
-    private AlertDialog dlMenuNode, dlMenuArc; // Fenêtre pour le menu
+    private AlertDialog dlMenuNode, dlMenuArc, dlMenuGame; // Fenêtre pour le menu
     private Dialog dlCoul; // Fenêtre pour le menu couleur
     private Dialog dlFile; // Fenêtre pour récupérer les fichiers graphe (.gra)
     private Context context; // Context permet de copier le context de la classe
@@ -93,18 +85,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         this.context = this; // Context de la vue
 
         //Affectation des objets à la vue
         dGraph = (DrawableGraph) findViewById(graphG);
 
-        this.graph = dGraph.getGraph();// Initialisation du graph (non graphique)
+        if (savedInstanceState != null) {
 
-        //Initialisation de la variable qui bloque la création d'arc
-        blockToArc = false;
-        //Initialisation de la variable qui bloque la modification de position arcs et noeuds
-        blockToMove = false;
+            this.graph = (Graph) savedInstanceState.getSerializable("Graph");
+
+            for(Node node : graph.getLstNodes()){
+                node.reinit();
+            }
+            blockToMove = true;
+            blockToArc = false;
+            dGraph.setGraph(graph);
+            dGraph.invalidate();
+        }else {
+            this.graph = dGraph.getGraph();// Initialisation du graph (non graphique)
+            //Initialisation de la variable qui bloque la création d'arc
+            blockToArc = false;
+            //Initialisation de la variable qui bloque la modification de position arcs et noeuds
+            blockToMove = false;
+
+            //Création du dossier de sauvegarde des graphes
+            createFolder();
+        }
+
         //Initialisation de la variable qui permet de savoir si un arc est créé
         arcCreate = false;
 
@@ -117,12 +126,6 @@ public class MainActivity extends AppCompatActivity {
         //Initialisation d'un touch Event et longClick sur la vue
         dGraph.setOnTouchListener(touchListener);
         dGraph.setOnLongClickListener(longClickListener);
-
-        Node node = null;//initialisation d'un noeud à null
-        Arc arc = null;// Initialisation d'un arc à null
-
-        //Création du dossier de sauvegarde des graphes
-        createFolder();
     }
 
     /**
@@ -133,28 +136,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelable("graph", graph); // Sauvegarde du graph non graphique
-        savedInstanceState.putBoolean("blockToArc", blockToArc); //Sauvegarde booleen
-        savedInstanceState.putBoolean("blockToMove", blockToMove);
-        savedInstanceState.putBoolean("boolCoulT", boolCoulT);
-        savedInstanceState.putString("coulTemp", coulTemp);
-    }
-
-    /**
-     * Procédure qui ré-affecte les composants sauvegardés si l'activité change.
-     *
-     * @param savedInstanceState
-     */
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        this.graph = savedInstanceState.getParcelable("graph"); // Restauration du graph non graphique
-        this.blockToArc = savedInstanceState.getBoolean("blockToArc");
-        this.blockToMove = savedInstanceState.getBoolean("blockToMove");
-        this.boolCoulT = savedInstanceState.getBoolean("boolCoulT");
-        this.coulTemp = savedInstanceState.getString("coulTemp");
-        //this.graph.redoPosition(dGraph.getSize());
-        dGraph.setGraph(this.graph);
+        savedInstanceState.putSerializable("Graph", graph);
     }
 
     /**
@@ -912,6 +894,36 @@ public class MainActivity extends AppCompatActivity {
     //--------------------------------
 
     /**
+     * Procédure qui permet de charger le jeu de dame.
+     *
+     * @param v : View
+     */
+    public void clicDame(View v) {
+        dlMenuGame.dismiss();
+        try {
+            InputStream inStream = getResources().openRawResource(R.raw.dame);
+            graph.clearNodes();
+            graph.clearArcs();
+            ObjectInputStream ois = null;
+            try {
+                ois = new ObjectInputStream(inStream);
+                graph = (Graph) ois.readObject();
+            } catch (Exception ex) {
+                Log.e("Main_clicDame", "Problème ObjectInputStream : " + ex);
+            }
+            for (Node node : graph.getLstNodes()) {
+                node.reinit();
+            }
+            blockToMove = true;
+            blockToArc = false;
+            dGraph.setGraph(graph);
+            dGraph.invalidate();
+        } catch (Exception e) {
+            Log.e("Main_clicDame", "Fichier Dame inexistant : " + e);
+        }
+    }
+
+    /**
      * Procédure qui est appellée au clic sur les boutons de couleurs
      * pour changer la couleur d'un noeud ou d'un arc.
      *
@@ -1035,9 +1047,47 @@ public class MainActivity extends AppCompatActivity {
             case R.id.send:
                 sendMail();
                 return true;
+            case R.id.special:
+                showDialMenuSpecial(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Fonction qui affiche le menu special.
+     *
+     * @param context
+     * @return boolean
+     */
+    public boolean showDialMenuSpecial(Context context) {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
+        View mView = layoutInflaterAndroid.inflate(R.layout.specialmode, null);
+        AlertDialog.Builder dlgBuild = new AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK &&
+                                event.getAction() == KeyEvent.ACTION_UP &&
+                                !event.isCanceled()) {
+                            dialog.cancel();
+                        }
+                        return false;
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+        dlgBuild.setView(mView);
+        dlMenuGame = dlgBuild.create();
+        dlMenuGame.setTitle(getResources().getString(R.string.modespe));
+        dlMenuGame.show();
+        return false;
     }
 
     /**
@@ -1101,7 +1151,6 @@ public class MainActivity extends AppCompatActivity {
      * Procédure qui permet d'ouvrir un fichier
      */
     private void open() {
-
         lstFile = new ArrayList<String>();
         final FileAdapter adapter;
         String path = Environment.getExternalStorageDirectory() + File.separator + "DCIM/Graphs";
@@ -1152,12 +1201,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void openFile(String path) throws IOException, ClassNotFoundException {
         try {
-            Graph object = null;
             File data = new File(path);
             if (data.exists()) {
                 graph.clearNodes();
                 graph.clearArcs();
-
                 graph = SerializableManager.openGraph(path);
 
                 for(Node node : graph.getLstNodes()){
@@ -1241,12 +1288,12 @@ public class MainActivity extends AppCompatActivity {
      * Procédure qui appelle une application messagerie email pour envoyer un email avec l'image en pièce jointe
      */
     private void sendMail() {
+        File file, f;
         try {
             //Enregistrement de l'image
             dGraph.setDrawingCacheEnabled(true);
             Bitmap bitmap = dGraph.getDrawingCache();
 
-            File file, f;
             file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Graphs");
             if (!file.exists()) {
                 file.mkdirs();
@@ -1264,8 +1311,6 @@ public class MainActivity extends AppCompatActivity {
             sharingIntent.setType("image/png");
             sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
             startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share)));
-
-            file.delete();
 
         } catch (Exception e) {
             e.printStackTrace();
