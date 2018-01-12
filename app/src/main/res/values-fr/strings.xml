@@ -47,4 +47,6 @@
     <string name="titleFile">Choisir un fichier</string>
     <string name="problemFile">Problème de fichier</string>
     <string name="share">Choisissez un support pour partager l\'image</string>
+    <string name="modespe">Spécial</string>
+    <string name="draughtsset">Dames</string>
 </resources>
