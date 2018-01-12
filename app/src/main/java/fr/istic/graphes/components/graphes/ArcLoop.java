@@ -8,16 +8,15 @@
  *		Formation : ....... Master 1 MIAGE							*
  *		Lecture : ......... MOBILE									*
  *		Group : ........... 1a										*
- *		Authors : ......... Cavron Jérémy, Ez Ziraiy Nada			*
+ *		Authors : ......... Cavron Jérémy               			*
  *		DateStart : ....... 09/09/2017								*
- *		DateModify : ...... 12/11/2017								*
+ *		DateModify : ...... 12/10/2018								*
  *******************************************************************/
-package bzh.dbs.graph.components.graphes;
+package fr.istic.graphes.components.graphes;
 
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
-
 import java.io.Serializable;
 
 /**
