@@ -26,4 +26,6 @@
         android:title="@string/open" />
     <item android:id="@+id/send"
         android:title="@string/send" />
+    <item android:id="@+id/special"
+        android:title="@string/modespe"/>
 </menu>
