@@ -47,4 +47,6 @@
     <string name="titleFile">File choice</string>
     <string name="problemFile">File failed</string>
     <string name="share">Share image using</string>
+    <string name="modespe">Special</string>
+    <string name="draughtsset">Draught Set</string>
 </resources>
