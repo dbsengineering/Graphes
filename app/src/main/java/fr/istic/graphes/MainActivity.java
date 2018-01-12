@@ -46,13 +46,13 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import bzh.dbs.graph.components.graphes.Arc;
-import bzh.dbs.graph.components.graphes.Graph;
-import bzh.dbs.graph.components.graphes.Node;
-import bzh.dbs.graph.utils.FileAdapter;
-import bzh.dbs.graph.utils.SerializableManager;
-import bzh.dbs.graph.view.DrawableGraph;
-import static bzh.dbs.graph.R.id.graphG;
+import fr.istic.graphes.components.graphes.Arc;
+import fr.istic.graphes.components.graphes.Graph;
+import fr.istic.graphes.components.graphes.Node;
+import fr.istic.graphes.utils.FileAdapter;
+import fr.istic.graphes.utils.SerializableManager;
+import fr.istic.graphes.view.DrawableGraph;
+import static fr.istic.graphes.R.id.graphG;
 
 /**
  *
