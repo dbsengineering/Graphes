@@ -74,11 +74,13 @@ public class Arc  implements Serializable {
      * Procédure d'initialisation du Path
      */
     private void initPath() {
+        //Initialisation
         this.pthArc = new Path();
         this.pthArrow = new Path();
         this.pMiddle = new PointF();
         this.region = new Region();
 
+        //Premier point de l'arc
         this.pthArc.moveTo(nodeStart.getpMiddle().x, nodeStart.getpMiddle().y);
 
         if (posX == 0 && posY == 0) {
@@ -89,9 +91,31 @@ public class Arc  implements Serializable {
                     , nodeEnd.getpMiddle().x, nodeEnd.getpMiddle().y);
         }
 
-        this.pM = new PathMeasure(this.pthArc, false);//Donne longueur avec chaque point de l'arc
+        //----------------------- Test pour la flêche avec tangente --------------------------------
+        //------------------------------------------------------------------------------------------
+        /*this.pM = new PathMeasure(this.pthArc, false);//Donne longueur avec chaque point de l'arc
         this.tab = new float[2];
-        this.pM.getPosTan(pM.getLength() / 2, tab, null);
+        float[] tangent = {0f, 0f};
+        this.pM.getPosTan(pM.getLength() / 2, tab, tangent);
+
+        PathMeasure pm = new PathMeasure(pthArc, false);
+        region.setPath(pthArc, region);
+        float[] point = {0f, 0f};
+
+        boolean d = false;
+
+        float x = pM.getLength();
+        while(!d) {
+            pm.getPosTan(pm.getLength() * x, point, null);
+            d = region.contains((int) point[0], (int) point[1]);
+            x /=2;
+        }*/ // Don't execute this.
+
+
+        //------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
+
+
 
         // --- Création de la flêche
         float deltaX = nodeEnd.getpMiddle().x - nodeStart.getpMiddle().x;
