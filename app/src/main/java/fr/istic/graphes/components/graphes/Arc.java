@@ -7,26 +7,23 @@
  *		Formation : ....... Master 1 MIAGE							*
  *		Lecture : ......... MOBILE									*
  *		Group : ........... 1a										*
- *		Authors : ......... Cavron Jérémy, Ez Ziraiy Nada			*
+ *		Authors : ......... Cavron Jérémy               			*
  *		DateStart : ....... 19/09/2017								*
- *		DateModify : ...... 12/11/2017								*
+ *		DateModify : ...... 12/01/2018								*
  *******************************************************************/
-package bzh.dbs.graph.components.graphes;
+package fr.istic.graphes.components.graphes;
 
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
  *
  */
-public class Arc  implements Parcelable, Serializable {
+public class Arc  implements Serializable {
 
     //--- Déclaration des propriétées ---
     private static final long serialVersionUID = -29238982928392L;
@@ -270,111 +267,4 @@ public class Arc  implements Parcelable, Serializable {
         this.sizeL = size;
     }
 
-
-    /**
-     * Fonction qui permet d'écrire le contenu du Parcel.
-     * @return
-     */
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    /**
-     * Procédure qui permet de parceler l'objet.
-     * @param dest : La parcelle dans laquelle l'objet doit être écrit. Parcel.
-     * @param flags : Drapeaux supplémentaires sur la façon dont l'objet doit être écrit.
-     *              Peut être 0 ou PARCELABLE_WRITE_RETURN_VALUE.
-     */
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeString(this.nameArc);
-        dest.writeString(this.color);
-        dest.writeString(this.colorTxt);
-
-        dest.writeInt(this.thickness);
-        dest.writeInt(this.sizeL);
-        dest.writeInt(this.id);
-        dest.writeInt(this.tailleEti);
-
-        dest.writeFloat(this.posX);
-        dest.writeFloat(this.posY);
-        dest.writeFloat(this.tab[0]);
-        dest.writeFloat(this.tab[1]);
-
-        float x = this.pMiddle.x;
-        float y = this.pMiddle.y;
-
-        dest.writeFloat(x);
-        dest.writeFloat(y);
-
-        float recLeft = this.rectTxt.left;
-        float recRight = this.rectTxt.right;
-        float recTop = this.rectTxt.top;
-        float recBottom = this.rectTxt.bottom;
-
-        dest.writeFloat(recLeft);
-        dest.writeFloat(recRight);
-        dest.writeFloat(recTop);
-        dest.writeFloat(recBottom);
-
-        dest.writeParcelable(this.nodeStart,0);
-        dest.writeParcelable(this.nodeEnd,0);
-    }
-
-    /**
-     * Création d’un objet CREATOR de la classe Parcelable
-     */
-    public static final Parcelable.Creator<Arc> CREATOR = new Parcelable.Creator<Arc>() {
-        /**
-         *
-         * @param in
-         * @return
-         */
-        public Arc createFromParcel(Parcel in) {
-            return new Arc(in);
-        }
-
-        /**
-         *
-         * @param size
-         * @return
-         */
-        public Arc[] newArray(int size) {
-            return new Arc[size];
-        }
-    };
-
-    /**
-     * Constructeur pour le parcel. Propriétées dans l'ordre d'écriture.
-     * @param in Parcel
-     */
-    public Arc(Parcel in){
-
-        this.nameArc = in.readString();
-        this.color = in.readString();
-        this.colorTxt = in.readString();
-
-        this.thickness = in.readInt();
-        this.sizeL = in.readInt();
-        this.id = in.readInt();
-        this.tailleEti = in.readInt();
-
-        this.posX = in.readFloat();
-        this.posY = in.readFloat();
-        this.tab[0] = in.readFloat();
-        this.tab[1] = in.readFloat();
-
-        this.pMiddle.x = in.readFloat();
-        this.pMiddle.y = in.readFloat();
-
-        this.rectTxt.left = in.readFloat();
-        this.rectTxt.right = in.readFloat();
-        this.rectTxt.top = in.readFloat();
-        this.rectTxt.bottom = in.readFloat();
-
-        this.nodeStart = in.readParcelable(Node.class.getClassLoader());
-        this.nodeEnd = in.readParcelable(Node.class.getClassLoader());
-    }
 }
