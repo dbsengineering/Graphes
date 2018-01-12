@@ -11,6 +11,10 @@ The application allows you to create, save and send graphs.
 
 <img src="https://user-images.githubusercontent.com/8668325/32703984-7ea598d4-c7fe-11e7-826e-26989b3369c0.png" width="400" height="790">
 
+Are you bored?
+
+So, you can load in special mode, a checkers game.
+
 
 
 ### Prerequisites
