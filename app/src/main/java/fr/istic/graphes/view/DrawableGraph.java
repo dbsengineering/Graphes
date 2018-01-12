@@ -12,7 +12,7 @@
  *		DateStart : ....... 19/09/2017								*
  *		DateModify : ...... 12/11/2017								*
  *******************************************************************/
-package bzh.dbs.graph.view;
+package fr.istic.graphes.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
