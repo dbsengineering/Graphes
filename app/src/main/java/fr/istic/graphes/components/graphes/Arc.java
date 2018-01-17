@@ -91,15 +91,19 @@ public class Arc  implements Serializable {
                     , nodeEnd.getpMiddle().x, nodeEnd.getpMiddle().y);
         }
 
+        this.tab = new float[2];
+        this.pM = new PathMeasure(this.pthArc, false);//Donne longueur avec chaque point de l'arc
+        region.setPath(pthArc, region);
+
         //----------------------- Test pour la flêche avec tangente --------------------------------
         //------------------------------------------------------------------------------------------
-        /*this.pM = new PathMeasure(this.pthArc, false);//Donne longueur avec chaque point de l'arc
-        this.tab = new float[2];
+
+
         float[] tangent = {0f, 0f};
         this.pM.getPosTan(pM.getLength() / 2, tab, tangent);
 
-        PathMeasure pm = new PathMeasure(pthArc, false);
-        region.setPath(pthArc, region);
+        /*PathMeasure pm = new PathMeasure(pthArc, false);
+
         float[] point = {0f, 0f};
 
         boolean d = false;
