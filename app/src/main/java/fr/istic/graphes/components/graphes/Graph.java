@@ -152,8 +152,16 @@ public class Graph implements Serializable {
             this.divScreenH += pf.x/4;
         }*/
     }
+    
+     public void setGrid(boolean active){
+        this.grid = active;
+    }
 
     //--- Getters ---
+    
+     public boolean getGrid(){
+        return this.grid;
+    }
 
     /**
      * Fonction qui retourne la liste des noeuds du graphe
