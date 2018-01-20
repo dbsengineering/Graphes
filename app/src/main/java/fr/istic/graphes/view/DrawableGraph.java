@@ -234,6 +234,7 @@ public class DrawableGraph extends View {
      * Procédure qui peremt d'activer les tuiles pour le jeu de dames.
      */
     public void activeCheckerGame(){
+        this.graph.setGrid(true);
         this.isGrid = true;
     }
 
@@ -241,6 +242,7 @@ public class DrawableGraph extends View {
      * Procédure qui permet de désactiver les tuiles pour le jeu de dames.
      */
     public void desactiveCheckerGame(){
+        this.graph.setGrid(false);
         this.isGrid = false;
     }
 
