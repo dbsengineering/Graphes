@@ -243,9 +243,9 @@ public class MainActivity extends AppCompatActivity {
                                     boolCoulT = true;
                                 }
                             }
-                            if (arc != null) {
+                            /*if (arc != null) {
 
-                            }
+                            }*/
                             dGraph.invalidate();
                         } catch (Exception e) {
                             Log.v("Exception up touch node", e.toString());
@@ -452,10 +452,10 @@ public class MainActivity extends AppCompatActivity {
                         if (graph.getNumNode() != 0) {
                             graph.setNumNode(graph.getNumNode() + 1);
                             graph.addNode(x, y, txtName.getText().toString(), graph.getNumNode() + 1);
-
                         } else {
                             graph.setNumNode(1);
                             graph.addNode(x, y, txtName.getText().toString(), 1);
+
                         }
                         //Validation du noeud
                         dGraph.invalidate();
@@ -626,7 +626,6 @@ public class MainActivity extends AppCompatActivity {
      * @param yStop  : position y d'arrivé. float
      */
     private void moveArc(Arc arc, float xStart, float yStart, float xStop, float yStop) {
-        //arc.setPath(xStart, yStart, xStop, yStop);
         arc.setPath(xStart, yStart, xStop, yStop);
     }
 
@@ -805,7 +804,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogBox, int id) {
                         if (graph.getNumArc() != 0) {
                             graph.setNumArc(graph.getNumArc() + 1);
-
                             graph.addArc(nodeStart, nodeEnd, txtName.getText().toString(), graph.getNumArc() + 1);
 
                         } else {
@@ -1150,8 +1148,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void save(String nameFile) throws IOException {
         try {
+            if(this.dGraph.getCheckerGame()){
+                this.graph.setGrid(true);
+            }
             String path = Environment.getExternalStorageDirectory() + File.separator + "/DCIM/Graphs" + File.separator;
             path += nameFile + ".gra";
+
             SerializableManager.saveFile(graph, path);
         }catch(Exception e){
             Log.e("Main_save", "Problème sauvegarde : " + e);
@@ -1218,6 +1220,9 @@ public class MainActivity extends AppCompatActivity {
                 graph.clearNodes();
                 graph.clearArcs();
                 graph = SerializableManager.openGraph(path);
+                if(graph.getGrid()){
+                    dGraph.activeCheckerGame();
+                }
 
                 for(Node node : graph.getLstNodes()){
                     node.reinit();
